@@ -36,6 +36,12 @@ const afterMessage = document.getElementById("after-message");
 const whyChanged = document.getElementById("why-changed");
 const messageCount = document.getElementById("message-count");
 
+const intensifiers = ["very", "really", "extremely", "so", "too", "absolutely", "completely", "seriously"];
+
+const politeWords = ["please", "thank you", "thanks", "appreciate", "kindly", "sorry", "understand", "could", "would"];
+
+
+
 const aggressiveWords = [
     "idiot", "stupid", "useless", "shut up", "hate",
     "damn", "hell", "ridiculous", "pathetic", "lazy",
@@ -47,30 +53,27 @@ const confrontationalPhrases = [
     "completely unfair",
     "fix this right now",
     "you never listen",
-    "you always"
+    "you always",
+    "nobody is actually listening",
+    "turned into an argument",
+    "stop dismissing my concerns"
 ];
 
 const blamePhrases = [
-    "you made me", "this is your fault", "because of you", "you caused this"
+    "you made me", "this is your fault", "because of you", "you caused this",
+    "take responsibility", "giving me excuses"
 ];
 
 const dismissivePhrases = [
-    "whatever", "who cares", "it doesn't matter", "you don't care"
+    "whatever", "who cares", "it doesn't matter", "you don't care", "gets ignored"
 ];
 
 const pressurePhrases = [
-    "do it now", "answer me now", "respond now", "how many times do I have to"
+    "do it now", "answer me now", "respond now", "how many times do I have to",
+    "repeat myself over and over again", "handle it later",
+    "another promise that will not be followed"
 ];
 
-const intensifiers = [
-    "always", "never", "really", "very",
-    "extremely", "totally", "absolutely"
-];
-
-const politeWords = [
-    "please", "thank you", "thanks", "appreciate",
-    "kindly", "sorry", "understand", "could", "would"
-];
 
 function updateCommunicationTips(text) {
     if (!text.trim()) {
@@ -700,6 +703,11 @@ const allLanguageSignals = [
             intensity += matches.length * 4;
         }
     });
+
+    intensity += Math.min(confrontationalDetected.length * 10, 30);
+    intensity += Math.min(blameDetected.length * 8, 24);
+    intensity += Math.min(dismissiveDetected.length * 7, 21);
+    intensity += Math.min(pressureDetected.length * 7, 21);
 
     const words = text.split(/\s+/);
 
