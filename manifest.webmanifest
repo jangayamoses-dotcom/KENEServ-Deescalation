@@ -1,0 +1,11 @@
+﻿{
+  "name": "Digital De-escalation Assistant",
+  "short_name": "De-escalation",
+  "description": "A local browser-based assistant for reducing message intensity and improving communication.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#172033",
+  "orientation": "portrait-primary",
+  "lang": "en"
+}

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#172033">
+    <link rel="manifest" href="manifest.webmanifest">
+    <title>Digital De-escalation Assistant</title>
+    <link rel="stylesheet" href="style.css">
+
+<style>
+.before-after-section {
+    margin-top: 24px;
+    padding: 20px;
+    border: 1px solid #e4e7ec;
+    border-radius: 16px;
+    background: #ffffff;
+}
+
+.before-after-header {
+    margin-bottom: 16px;
+}
+
+.before-after-header h2 {
+    margin: 0;
+    color: #172033;
+    font-size: 20px;
+}
+
+.before-after-header p {
+    margin: 5px 0 0;
+    color: #667085;
+    font-size: 13px;
+}
+
+.before-after-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.before-card,
+.after-card,
+.why-card {
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #e4e7ec;
+}
+
+.before-card {
+    background: #fff7f7;
+}
+
+.after-card {
+    background: #f3fff8;
+}
+
+.why-card {
+    margin-top: 14px;
+    background: #f8fafc;
+}
+
+.before-card h3,
+.after-card h3,
+.why-card h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #172033;
+}
+
+.before-card h3 {
+    color: #b42318;
+}
+
+.after-card h3 {
+    color: #027a48;
+}
+
+.before-after-message {
+    color: #344054;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.why-card ul {
+    margin: 8px 0 0;
+    padding-left: 20px;
+    color: #475467;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+body.dark-mode .before-after-section {
+    background: #1d2939;
+    border-color: #344054;
+}
+
+body.dark-mode .before-after-header h2 {
+    color: #f2f4f7;
+}
+
+body.dark-mode .before-after-header p {
+    color: #98a2b3;
+}
+
+body.dark-mode .before-card,
+body.dark-mode .after-card,
+body.dark-mode .why-card {
+    border-color: #344054;
+}
+
+body.dark-mode .before-card {
+    background: #321d25;
+}
+
+body.dark-mode .after-card {
+    background: #163025;
+}
+
+body.dark-mode .why-card {
+    background: #162033;
+}
+
+body.dark-mode .before-after-message,
+body.dark-mode .why-card ul {
+    color: #d0d5dd;
+}
+
+body.dark-mode .before-card h3,
+body.dark-mode .after-card h3,
+body.dark-mode .why-card h3 {
+    color: #f2f4f7;
+}
+
+@media (max-width: 700px) {
+    .before-after-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+
+    <main class="app">
+        <header>
+            <button id="theme-toggle" class="theme-toggle" type="button">🌙 Dark mode</button>
+<button id="language-toggle" class="theme-toggle" type="button">🇰🇪 Kiswahili</button>
+            <h1>Digital De-escalation Assistant</h1>
+            <p id="subtitle-text">Analyze tone. Reduce intensity. Communicate better.</p>
+        </header>
+
+        <section class="input-section">
+            <label for="message">Your message</label>
+            <textarea
+                id="message"
+                placeholder="Type or paste your message here..."
+                rows="8"
+            ></textarea>
+            <div id="message-count" class="message-count">Words: 0 · Characters: 0</div>
+
+            <div id="highlight-preview" class="highlight-preview">
+                Viashiria vya lugha vilivyoangaziwa vitaonekana hapa.
+            </div>
+        </section>
+
+        <section class="language-alert" id="language-alert">
+            <h2>Language signals</h2>
+            <p id="detected-words">Hakuna lugha kali iliyogunduliwa.</p>
+        </section>
+        <section class="analysis">
+            <div class="gauge-card">
+                <h2>Intensity</h2>
+                <div class="gauge">
+                    <div id="gauge-fill"></div>
+                </div>
+                <div class="gauge-scale" id="gauge-scale">
+                    <span>Calm</span>
+                    <span>Slight</span>
+                    <span>Moderate</span>
+                    <span>High</span>
+                    <span>High sana</span>
+                </div>
+                <strong id="anger-score">0%</strong>
+                <p id="tone-label">Hakuna ujumbe uliochanganuliwa</p>
+            </div>
+
+            <div class="scores">
+                <div>
+                    <span id="warmth-label">Warmth</span>
+                    <strong id="warmth-score">0%</strong>
+                </div>
+
+                <div>
+                    <span id="professionalism-label">Professionalism</span>
+                    <strong id="professional-score">0%</strong>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Score explanation -->
+        <div id="score-explanation" class="score-explanation">
+            <div class="explanation-title" id="score-explanation-title">Why this score?</div>
+            <div id="score-reasons"></div>
+        </div>
+        <div id="communication-tips" class="communication-tips">
+            <div class="tips-title" id="communication-tips-title">Communication tips</div>
+            <div id="tips-content">Tips will appear here as you type.</div>
+        </div>
+
+        <div id="message-quality" class="message-quality">
+            <div class="tips-title" id="message-quality-title">Message quality</div>
+            <div class="quality-grid">
+                <div><span id="clarity-label">Clarity</span><strong id="clarity-score">0%</strong></div>
+                <div><span id="specificity-label">Specificity</span><strong id="specificity-score">0%</strong></div>
+                <div><span id="request-label">Clarity wa ombi</span><strong id="request-score">0%</strong></div>
+                <div><span id="readability-label">Readability</span><strong id="readability-score">0%</strong></div>
+            </div>
+        </div>
+
+        <section class="rewrite-section">
+            <div class="preset-control">
+    <label for="incident-preset">Situation</label>
+    <select id="incident-preset">
+        <option value="general">General</option>
+        <option value="personal">Personal / Relationship</option>
+        <option value="school">School / Lecturer</option>
+        <option value="work">Workplace</option>
+        <option value="customer">Customer Service</option>
+        <option value="social">Social Media</option>
+        <option value="conflict">Conflict / Complaint</option>
+    </select>
+</div>
+<div class="preset-control"><label for="tone-goal">Tone goal</label><select id="tone-goal"><option value="deescalate">De-escalate</option><option value="response">Get a response</option><option value="apologize">Apologize</option><option value="professional">Stay professional</option><option value="relationship">Protect the relationship</option><option value="firm">Be firm but respectful</option></select></div><div class="rewrite-controls">
+                <div>
+                    <label for="rewrite-mode">Rewrite style</label>
+                    <select id="rewrite-mode">
+                        <option value="balanced">Balanced</option>
+                        <option value="formal">Formal</option>
+                        <option value="casual">Casual Friendly</option>
+                    </select>
+                </div>
+                <div class="courtesy-control">
+                    <label for="courtesy">Courtesy</label>
+                    <input
+                        type="range"
+                        id="courtesy"
+                        min="0"
+                        max="100"
+                        value="60"
+                    >
+                    <span id="courtesy-value">60%</span>
+                </div>
+            </div>
+                        <h2>Calm rewrite</h2>
+            <div id="rewrite" class="rewrite-box">
+                Your polished message will appear here.
+            </div>
+            <section id="before-after-section" class="before-after-section">
+    <div class="before-after-header">
+        <div>
+            <h2>Before &amp; After</h2>
+            <p>See how the assistant changed your message and why.</p>
+        </div>
+    </div>
+    <div class="before-after-grid">
+        <div class="before-card">
+            <h3>Before</h3>
+            <div id="before-message" class="before-after-message">Your original message will appear here.</div>
+        </div>
+        <div class="after-card">
+            <h3>After</h3>
+            <div id="after-message" class="before-after-message">Your polished message will appear here.</div>
+        </div>
+    </div>
+    <div class="why-card">
+        <h3 id="why-changed-title">Why this changed</h3>
+        <div id="why-changed">Uchambuzi utaonekana hapa.</div>
+    </div>
+</section>
+<section id="history-section" class="history-section">
+            <div class="history-header">
+                <div>
+                    <h2>History</h2>
+                    <p>Your recent analyzed messages are stored only in this browser.</p>
+                </div>
+                <button id="clear-history" type="button">Clear history</button>
+            </div>
+            <div id="history-list" class="history-list">
+                <div class="history-empty">No saved messages yet.</div>
+            </div>
+        </section>
+        <button id="copy-button">Copy polished message</button>
+<button id="save-history-button" type="button">Save to history</button>
+<button id="share-button" type="button">Share polished message</button>
+<button id="email-button" type="button">📧 Email</button>
+<button id="whatsapp-button" type="button">💬 WhatsApp</button>
+<button id="telegram-button" type="button">✈️ Telegram</button>
+<button id="instagram-button" type="button">📸 Instagram</button>            <button id="reset-button" type="button">Clear / Reset</button>
+        </section>
+        <section id="privacy-dashboard" class="privacy-dashboard">
+            <div class="privacy-header">
+                <div>
+                    <h2>Privacy Dashboard</h2>
+                    <p>See how this assistant handles your messages and data.</p>
+                </div>
+                <div class="privacy-status">🟢 Local only</div>
+            </div>
+
+            <div class="privacy-grid">
+                <div class="privacy-card">
+                    <span class="privacy-icon">🛡️</span>
+                    <h3>Local analysis</h3>
+                    <p>Your message is analyzed directly in this browser.</p>
+                </div>
+
+                <div class="privacy-card">
+                    <span class="privacy-icon">☁️</span>
+                    <h3>No cloud processing</h3>
+                    <p>Your messages are not sent to a cloud AI service.</p>
+                </div>
+
+                <div class="privacy-card">
+                    <span class="privacy-icon">🔑</span>
+                    <h3>No API key</h3>
+                    <p>The assistant does not require an AI API key to analyze messages.</p>
+                </div>
+
+                <div class="privacy-card">
+                    <span class="privacy-icon">💾</span>
+                    <h3>Browser history</h3>
+                    <p>Saved messages stay in this browser until you clear them.</p>
+                </div>
+            </div>
+
+            <div class="privacy-controls">
+                <div>
+                    <h3>Your data</h3>
+                    <p id="privacy-history-status">Checking local history...</p>
+                </div>
+                <button id="privacy-clear-history" type="button">Clear saved history</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
