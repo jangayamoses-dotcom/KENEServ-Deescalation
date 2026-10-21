@@ -144,8 +144,8 @@ body.dark-mode .why-card h3 {
 
     <main class="app">
         <header>
-            <button id="theme-toggle" class="theme-toggle" type="button">🌙 Dark mode</button>
-<button id="language-toggle" class="theme-toggle" type="button">🇰🇪 Kiswahili</button>
+            <button id="theme-toggle" class="theme-toggle" type="button"><span id="theme-toggle-icon" class="control-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z"/></svg></span><span id="theme-toggle-label">Dark mode</span></button>
+<button id="language-toggle" class="theme-toggle" type="button"><span class="control-icon" aria-hidden="true"><svg viewBox="0 0 30 20"><rect width="30" height="20" rx="1" fill="#fff"/><rect y="0" width="30" height="5.5" fill="#111"/><rect y="7.25" width="30" height="5.5" fill="#bb0000"/><rect y="14.5" width="30" height="5.5" fill="#006600"/><path d="M15 4.5c-4 3-4 8 0 11 4-3 4-8 0-11Z" fill="#bb0000" stroke="#fff" stroke-width="1.1"/><path d="M15 5.5v9" stroke="#111" stroke-width="1.2"/></svg></span><span id="language-toggle-label">Kiswahili</span></button>
             <h1>Digital De-escalation Assistant</h1>
             <p id="subtitle-text">Analyze tone. Reduce intensity. Communicate better.</p>
         </header>
@@ -157,7 +157,7 @@ body.dark-mode .why-card h3 {
                 placeholder="Type or paste your message here..."
                 rows="8"
             ></textarea>
-            <div id="message-count" class="message-count">Words: 0 · Characters: 0</div>
+            <div id="message-count" class="message-count">Words: 0 | Characters: 0</div>
 
             <div id="highlight-preview" class="highlight-preview">
                 Viashiria vya lugha vilivyoangaziwa vitaonekana hapa.
@@ -294,46 +294,199 @@ body.dark-mode .why-card h3 {
         <button id="copy-button">Copy polished message</button>
 <button id="save-history-button" type="button">Save to history</button>
 <button id="share-button" type="button">Share polished message</button>
-<button id="email-button" type="button">📧 Email</button>
-<button id="whatsapp-button" type="button">💬 WhatsApp</button>
-<button id="telegram-button" type="button">✈️ Telegram</button>
-<button id="instagram-button" type="button">📸 Instagram</button>            <button id="reset-button" type="button">Clear / Reset</button>
+
+
+
+            <button id="reset-button" type="button">Clear / Reset</button>
         </section>
-        <section id="privacy-dashboard" class="privacy-dashboard">
+                <section id="caption-generator" class="caption-generator" aria-labelledby="caption-generator-title">
+            <div class="caption-header">
+                <div>
+                    <p id="caption-generator-eyebrow" class="caption-eyebrow">LOCAL WRITING TOOL</p>
+                    <h2 id="caption-generator-title">Caption Generator</h2>
+                    <p id="caption-intro">Create clear, accurate captions from the details you provide.</p>
+                </div>
+                <span id="caption-local-badge" class="caption-local-badge">Works locally</span>
+            </div>
+
+            <div class="caption-form">
+                <div class="caption-field caption-field-full">
+                    <label for="caption-description">Photo or event description <span aria-hidden="true">*</span></label>
+                    <textarea id="caption-description" rows="4" maxlength="3000" placeholder="Describe what is visible in the photo or what happened. Include only details you know." aria-describedby="caption-description-help"></textarea>
+                    <small id="caption-description-help">Be specific. The generator uses your description as its factual foundation.</small>
+                    <div id="caption-description-count" class="caption-count">0 / 3000 characters</div>
+                </div>
+
+                <div class="caption-field caption-field-full">
+                    <label for="caption-facts">Additional verified details <span class="caption-optional">(optional)</span></label>
+                    <textarea id="caption-facts" rows="3" maxlength="2000" placeholder="Add confirmed names, dates, locations, scores, quotations or other facts you want included."></textarea>
+                    <small id="caption-facts-help">Only include details you have verified or are confident are accurate.</small>
+                </div>
+
+                <div class="caption-field">
+                    <label for="caption-platform">Platform or use</label>
+                    <select id="caption-platform">
+                        <option value="facebook">Facebook</option>
+                        <option value="instagram">Instagram</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="x">X</option>
+                        <option value="news">News / Photojournalism</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="caption-field">
+                    <label for="caption-purpose">Purpose</label>
+                    <select id="caption-purpose">
+                        <option value="event">Event coverage</option>
+                        <option value="announcement">Announcement</option>
+                        <option value="awareness">Awareness</option>
+                        <option value="education">Education / Information</option>
+                        <option value="promotion">Promotion</option>
+                        <option value="personal">Personal update</option>
+                        <option value="general">General update</option>
+                    </select>
+                </div>
+
+                <div class="caption-field">
+                    <label for="caption-style">Writing style</label>
+                    <select id="caption-style">
+                        <option value="journalistic">Journalistic</option>
+                        <option value="professional">Professional</option>
+                        <option value="informative">Informative</option>
+                        <option value="creative">Creative</option>
+                        <option value="casual">Casual and friendly</option>
+                    </select>
+                </div>
+
+                <div class="caption-field">
+                    <label for="caption-length">Caption length</label>
+                    <select id="caption-length">
+                        <option value="short">Short</option>
+                        <option value="standard" selected>Standard</option>
+                        <option value="detailed">Detailed</option>
+                    </select>
+                </div>
+
+                <div class="caption-field">
+                    <label for="caption-language">Caption language</label>
+                    <select id="caption-language">
+                        <option value="en" selected>English</option>
+                        <option value="sw">Kiswahili</option>
+                    </select>
+                </div>
+
+                <div class="caption-field">
+                    <label for="caption-hashtags">Hashtags</label>
+                    <select id="caption-hashtags">
+                        <option value="none">No hashtags</option>
+                        <option value="few">A few relevant hashtags</option>
+                    </select>
+                </div>
+
+                <div class="caption-field caption-field-full">
+                    <label for="caption-call-to-action">Call to action <span class="caption-optional">(optional)</span></label>
+                    <input id="caption-call-to-action" type="text" maxlength="180" placeholder="For example: Share your views in the comments.">
+                    <small id="caption-cta-help">Leave blank if you do not need a call to action.</small>
+                </div>
+            </div>
+
+            <div class="caption-actions">
+                <button id="generate-caption-button" type="button">Generate Caption</button>
+                <button id="clear-caption-button" type="button">Clear Inputs</button>
+            </div>
+
+            <div id="caption-status" class="caption-status" role="status" aria-live="polite"></div>
+
+            <section id="caption-result-section" class="caption-result" aria-labelledby="caption-result-title" hidden>
+                <div class="caption-result-header">
+                    <h3 id="caption-result-title">Your Caption</h3>
+                    <span id="caption-result-style"></span>
+                </div>
+                <div id="caption-result-text" class="caption-result-text" tabindex="0"></div>
+                <div class="caption-result-meta">
+                    <span id="caption-result-count">0 characters</span>
+                    <span id="caption-result-words">0 words</span>
+                </div>
+                <div class="caption-result-actions">
+                    <button id="copy-caption-button" type="button">Copy Caption</button>
+                    <button id="share-caption-button" type="button">Share Caption</button>
+                    <button id="regenerate-caption-button" type="button">Generate Another Version</button>
+                </div>
+                <p id="caption-accuracy-note" class="caption-accuracy-note">Review the caption before publishing, especially names, dates, quotations and other factual details.</p>
+            </section>
+        </section>
+
+    </main>
+
+<section id="privacy-dashboard" class="privacy-dashboard">
             <div class="privacy-header">
                 <div>
                     <h2>Privacy Dashboard</h2>
                     <p>See how this assistant handles your messages and data.</p>
                 </div>
-                <div class="privacy-status">🟢 Local only</div>
+                <div class="privacy-status"><span class="privacy-flag" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.5 14.5 6l4.3-.2-.2 4.3 3.4 2.9-3.4 2.9.2 4.3-4.3-.2L12 23l-2.5-3.5-4.3.2.2-4.3L2 12.5l3.4-2.9-.2-4.3 4.3.2Z"/><circle cx="12" cy="12.5" r="3.2"/></svg></span><span id="privacy-status-label">Local only</span></div>
             </div>
 
             <div class="privacy-grid">
                 <div class="privacy-card">
-                    <span class="privacy-icon">🛡️</span>
+                    <span class="privacy-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 8h10M7 11h6"/></svg></span>
                     <h3>Local analysis</h3>
                     <p>Your message is analyzed directly in this browser.</p>
                 </div>
 
                 <div class="privacy-card">
-                    <span class="privacy-icon">☁️</span>
+                    <span class="privacy-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 16.5a4.5 4.5 0 0 1 1.6-8.7A6.5 6.5 0 0 1 17 6.5a5 5 0 0 1 2.5 9.4"/><path d="m4 4 16 16"/></svg></span>
                     <h3>No cloud processing</h3>
                     <p>Your messages are not sent to a cloud AI service.</p>
                 </div>
 
                 <div class="privacy-card">
-                    <span class="privacy-icon">🔑</span>
+                    <span class="privacy-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="8" cy="15" r="4"/><path d="m11 12 8-8 2 2-2 2 2 2-3 3-2-2-3 3M8 15h.01"/></svg></span>
                     <h3>No API key</h3>
                     <p>The assistant does not require an AI API key to analyze messages.</p>
                 </div>
 
                 <div class="privacy-card">
-                    <span class="privacy-icon">💾</span>
+                    <span class="privacy-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2M4.9 4.9 3 3M20 4l1-1"/></svg></span>
                     <h3>Browser history</h3>
                     <p>Saved messages stay in this browser until you clear them.</p>
                 </div>
             </div>
 
+            <section class="development-notice" id="development-notice">
+                <div class="development-notice-heading">
+                    <span class="development-badge" id="development-badge">UNDER DEVELOPMENT</span>
+                    <h3 id="development-title">This application is still being improved</h3>
+                </div>
+                <p id="development-text">Some features may produce incomplete or inaccurate results. Review all suggestions before sending messages or publishing captions. Do not depend on this tool as your only source of guidance in serious or sensitive situations.</p>
+            </section>
+
+            <div class="privacy-detail-grid">
+                <article class="privacy-card privacy-detail-card">
+                    <span class="privacy-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 21 20H3L12 3Z"/><path d="M12 9v5M12 17h.01"/></svg></span>
+                    <h3 id="privacy-message-limit-title">Message analysis limitations</h3>
+                    <p id="privacy-message-limit-text">Tone and intensity scores are estimates based on language patterns. They do not reliably reveal a person's true feelings, intentions, or the full context of a conversation. Review every suggested rewrite before sending it.</p>
+                </article>
+
+                <article class="privacy-card privacy-detail-card">
+                    <span class="privacy-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h11l5 5v11H4z"/><path d="M15 4v5h5M8 14l2.5 2.5L16 11"/></svg></span>
+                    <h3 id="privacy-caption-limit-title">Caption accuracy and responsibility</h3>
+                    <p id="privacy-caption-limit-text">Captions are based on the details you provide. The tool does not independently verify names, dates, locations, quotations, statistics, or other claims, and it does not automatically inspect photographs. Check facts and context before publishing.</p>
+                </article>
+
+                <article class="privacy-card privacy-detail-card">
+                    <span class="privacy-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span>
+                    <h3 id="privacy-feature-limit-title">What this tool cannot do</h3>
+                    <p id="privacy-feature-limit-text">The assistant does not provide independent fact-checking, professional counselling, emergency response, or guaranteed emotional understanding. Seek appropriate human or professional help when a situation requires it.</p>
+                </article>
+
+                <article class="privacy-card privacy-detail-card">
+                    <span class="privacy-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><rect x="9" y="10" width="6" height="5" rx="1"/><path d="M10.5 10V8.5a1.5 1.5 0 0 1 3 0V10"/></svg></span>
+                    <h3 id="privacy-data-limit-title">Protect your personal information</h3>
+                    <p id="privacy-data-limit-text">Avoid entering passwords, PINs, financial information, or sensitive personal details. Saved message history is stored in this browser and may be accessible to someone who can use your device or browser profile.</p>
+                </article>
+            </div>
             <div class="privacy-controls">
                 <div>
                     <h3>Your data</h3>
@@ -342,7 +495,7 @@ body.dark-mode .why-card h3 {
                 <button id="privacy-clear-history" type="button">Clear saved history</button>
             </div>
         </section>
-    </main>
+
 
     <script src="app.js"></script>
 </body>

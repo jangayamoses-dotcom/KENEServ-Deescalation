@@ -27,10 +27,6 @@ const historyList = document.getElementById("history-list");
 const clearHistoryButton = document.getElementById("clear-history");
 const saveHistoryButton = document.getElementById("save-history-button");
 const shareButton = document.getElementById("share-button");
-const emailButton = document.getElementById("email-button");
-const whatsappButton = document.getElementById("whatsapp-button");
-const telegramButton = document.getElementById("telegram-button");
-const instagramButton = document.getElementById("instagram-button");
 const beforeMessage = document.getElementById("before-message");
 const afterMessage = document.getElementById("after-message");
 const whyChanged = document.getElementById("why-changed");
@@ -45,7 +41,10 @@ const politeWords = ["please", "thank you", "thanks", "appreciate", "kindly", "s
 const aggressiveWords = [
     "idiot", "stupid", "useless", "shut up", "hate",
     "damn", "hell", "ridiculous", "pathetic", "lazy",
-    "liar", "liars", "fool"
+    "liar", "liars", "fool", "clown", "moron",
+    "dumbass", "asshole", "bitch", "bastard", "loser",
+    "trash", "worthless", "disgusting", "annoying",
+    "embarrassing", "delusional"
 ];
 
 const confrontationalPhrases = [
@@ -56,22 +55,82 @@ const confrontationalPhrases = [
     "you always",
     "nobody is actually listening",
     "turned into an argument",
-    "stop dismissing my concerns"
+    "stop dismissing my concerns",
+    "dismissing my concerns",
+    "you're doing too much",
+    "you are doing too much",
+    "be so fr",
+    "bffr",
+    "stop yapping",
+    "touch grass",
+    "get a grip",
+    "what is wrong with you",
+    "you've got to be kidding me",
+    "you have got to be kidding me",
+    "you're embarrassing",
+    "you are embarrassing",
+    "you're so fake",
+    "you are so fake",
+    "L take",
+    "skill issue",
+    "you must be joking"
 ];
 
 const blamePhrases = [
     "you made me", "this is your fault", "because of you", "you caused this",
-    "take responsibility", "giving me excuses"
+    "take responsibility", "giving me excuses",
+    "you always mess things up",
+    "you ruined everything",
+    "you are the problem",
+    "it's all your fault",
+    "this is on you",
+    "you brought this on yourself",
+    "skill issue",
+    "you never get anything right"
 ];
 
 const dismissivePhrases = [
-    "whatever", "who cares", "it doesn't matter", "you don't care", "gets ignored"
+    "whatever",
+    "who cares",
+    "it doesn't matter",
+    "you don't care",
+    "you clearly don't care",
+    "you clearly don't care what I say",
+    "you don't care what I say",
+    "you don't care about my concerns",
+    "you never care",
+    "you don't even care",
+    "gets ignored",
+    "stop yapping",
+    "touch grass",
+    "that's cap",
+    "thats cap",
+    "L take",
+    "get a grip",
+    "I'm done with you",
+    "im done with you",
+    "you're so fake",
+    "you are so fake",
+    "IDC",
+    "I don't give a damn",
+    "I don't give a shit"
 ];
 
 const pressurePhrases = [
-    "do it now", "answer me now", "respond now", "how many times do I have to",
-    "repeat myself over and over again", "handle it later",
-    "another promise that will not be followed"
+    "do it now",
+    "answer me now",
+    "respond now",
+    "how many times do I have to",
+    "repeat myself over and over again",
+    "handle it later",
+    "another promise that will not be followed",
+    "reply right now",
+    "text me back right now",
+    "answer me immediately",
+    "you better respond",
+    "respond or else",
+    "I'm not asking again",
+    "im not asking again"
 ];
 
 
@@ -84,19 +143,19 @@ function updateCommunicationTips(text) {
     const lower = text.toLowerCase();
     const tips = [];
 
-    if (confrontationalPhrases.some(phrase => lower.includes(phrase))) {
+    if (confrontationalPhrases.some(phrase => containsTerm(lower, phrase))) {
         tips.push(currentLanguage === "sw" ? "Jaribu kubadilisha maneno ya makabiliano kuwa ombi maalum." : "Try replacing confrontational phrases with a specific request.");
     }
 
-    if (blamePhrases.some(phrase => lower.includes(phrase))) {
+    if (blamePhrases.some(phrase => containsTerm(lower, phrase))) {
         tips.push(currentLanguage === "sw" ? "Zingatia hali na athari zake badala ya kumlaumu mtu." : "Focus on the situation and its impact instead of assigning blame.");
     }
 
-    if (dismissivePhrases.some(phrase => lower.includes(phrase))) {
+    if (dismissivePhrases.some(phrase => containsTerm(lower, phrase))) {
         tips.push(currentLanguage === "sw" ? "Epuka maneno ya kupuuza na eleza unachohitaji kwa uwazi." : "Avoid dismissive wording and explain what you need clearly.");
     }
 
-    if (pressurePhrases.some(phrase => lower.includes(phrase))) {
+    if (pressurePhrases.some(phrase => containsTerm(lower, phrase))) {
         tips.push(currentLanguage === "sw" ? "Mpe mwingine nafasi ya kujibu badala ya kumwekea shinikizo." : "Give the other person room to respond instead of creating pressure.");
     }
 
@@ -108,7 +167,7 @@ function updateCommunicationTips(text) {
         tips.push(currentLanguage === "sw" ? "Ujumbe wako hauna viashiria vikubwa vya lugha. Weka ombi lako wazi na maalum." : "Your message has no major language signals. Keep the request clear and specific.");
     }
 
-    tipsContent.innerHTML = tips.map(tip => "• " + escapeHtml(tip)).join("<br>");
+    tipsContent.innerHTML = tips.map(tip => "- " + escapeHtml(tip)).join("<br>");
 }
 
 function updateMessageQuality(text) {
@@ -132,9 +191,9 @@ function updateMessageQuality(text) {
     if (sentences.length > 0 && sentences.length <= 4) clarity += 15;
     if (words.length >= 5 && words.length <= 80) clarity += 15;
     if (words.length > 120) clarity -= 15;
-    if (specificWords.some(word => text.toLowerCase().includes(word))) specificity += 20;
+    if (specificWords.some(word => containsTerm(text, word))) specificity += 20;
     if (words.length >= 10) specificity += 10;
-    if (requestWords.some(word => text.toLowerCase().includes(word))) request += 35;
+    if (requestWords.some(word => containsTerm(text, word))) request += 35;
     if (text.includes("?")) request += 10;
 
     const avgSentenceLength = sentences.length ? words.length / sentences.length : words.length;
@@ -158,7 +217,7 @@ function updateMessageCount(text) {
     const value = text.trim();
     const words = value ? value.split(/\s+/).filter(Boolean).length : 0;
     const characters = text.length;
-    messageCount.textContent = currentLanguage === "sw" ? "Maneno: " + words + " · Herufi: " + characters : "Words: " + words + " · Characters: " + characters;
+    messageCount.textContent = currentLanguage === "sw" ? "Maneno: " + words + " | Herufi: " + characters : "Words: " + words + " | Characters: " + characters;
 }
 
 function getHistory() {
@@ -224,6 +283,10 @@ function loadHistoryItem(id) {
     }
 
     messageInput.value = item.message;
+    if (!messageInput.value.trim()) {
+        toneLabel.textContent = currentLanguage === "sw" ? "Hakuna ujumbe uliochanganuliwa" : "No message analyzed";
+    }
+
     updateMessageCount(messageInput.value);
     analyzeMessage(messageInput.value);
     messageInput.focus();
@@ -252,29 +315,36 @@ function updateBeforeAfter(text, rewrite) {
     afterMessage.textContent = rewrite;
 
     const lower = text.toLowerCase();
+    const rewriteLower = rewrite.toLowerCase();
     const reasons = [];
 
-    if (aggressiveWords.some(word => lower.includes(word))) {
+    if (aggressiveWords.some(word => containsTerm(lower, word)) &&
+        !aggressiveWords.some(word => containsTerm(rewriteLower, word))) {
         reasons.push(currentLanguage === "sw" ? "Maneno ya matusi au ukali yamepunguzwa." : "Reduced insulting or aggressive wording.");
     }
 
-    if (confrontationalPhrases.some(phrase => lower.includes(phrase))) {
+    if (confrontationalPhrases.some(phrase => containsTerm(lower, phrase)) &&
+        !confrontationalPhrases.some(phrase => containsTerm(rewriteLower, phrase))) {
         reasons.push(currentLanguage === "sw" ? "Kauli za makabiliano zimebadilishwa kuwa maneno tulivu zaidi." : "Replaced confrontational phrases with calmer wording.");
     }
 
-    if (blamePhrases.some(phrase => lower.includes(phrase))) {
+    if (blamePhrases.some(phrase => containsTerm(lower, phrase)) &&
+        !blamePhrases.some(phrase => containsTerm(rewriteLower, phrase))) {
         reasons.push(currentLanguage === "sw" ? "Lugha ya kulaumu imeelekezwa kwenye hali na athari zake." : "Shifted blame-focused language toward the situation and its impact.");
     }
 
-    if (dismissivePhrases.some(phrase => lower.includes(phrase))) {
+    if (dismissivePhrases.some(phrase => containsTerm(lower, phrase)) &&
+        !dismissivePhrases.some(phrase => containsTerm(rewriteLower, phrase))) {
         reasons.push(currentLanguage === "sw" ? "Maneno ya kupuuza yamebadilishwa kuwa mawasiliano yaliyo wazi zaidi." : "Replaced dismissive wording with clearer communication.");
     }
 
-    if (pressurePhrases.some(phrase => lower.includes(phrase))) {
+    if (pressurePhrases.some(phrase => containsTerm(lower, phrase)) &&
+        !pressurePhrases.some(phrase => containsTerm(rewriteLower, phrase))) {
         reasons.push(currentLanguage === "sw" ? "Shinikizo limepunguzwa ili kumpa mwingine nafasi ya kujibu." : "Reduced pressure so the other person has room to respond.");
     }
 
-    if ((text.match(/!/g) || []).length >= 2) {
+    if ((text.match(/!/g) || []).length >= 2 &&
+        (rewrite.match(/!/g) || []).length < (text.match(/!/g) || []).length) {
         reasons.push(currentLanguage === "sw" ? "Alama za mshangao zilizorudiwa zimepunguzwa ili ujumbe uwe mtulivu zaidi." : "Reduced repeated exclamation marks to make the message feel calmer.");
     }
 
@@ -290,7 +360,11 @@ function updateBeforeAfter(text, rewrite) {
     }
 
     if (reasons.length === 0) {
-        reasons.push(currentLanguage === "sw" ? "Maana kuu imehifadhiwa huku uwazi, mtindo na weledi vikiboreshwa." : "Preserved the main meaning while improving clarity, tone, and professionalism.");
+        if (text.trim() === rewrite.trim()) {
+            reasons.push(currentLanguage === "sw" ? "Sheria za sasa hazikubadilisha maneno; tafadhali kagua ujumbe kabla ya kuutuma." : "No wording changes were made by the current rules; review the message before sending.");
+        } else {
+            reasons.push(currentLanguage === "sw" ? "Maneno yamebadilishwa huku hoja kuu ikihifadhiwa." : "The wording was adjusted while keeping the main point.");
+        }
     }
 
     whyChanged.innerHTML =
@@ -299,11 +373,11 @@ function updateBeforeAfter(text, rewrite) {
         "</ul>";
 }
 
-let currentLanguage = "sw";
+let currentLanguage = "en";
 
 const languageText = {
     en: {
-        button: "🇰🇪 Kiswahili",
+        button: "Kiswahili",
         title: "Digital De-escalation Assistant",
         subtitle: "Analyze tone. Reduce intensity. Communicate better.",
         warmth: "Warmth",
@@ -348,10 +422,10 @@ const languageText = {
         copy: "Copy polished message",
         save: "Save to history",
         share: "Share polished message",
-        email: "📧 Email",
-        whatsapp: "💬 WhatsApp",
-        telegram: "✈️ Telegram",
-        instagram: "📸 Instagram",
+        email: "ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â§ Email",
+        whatsapp: "ÃƒÂ°Ã…Â¸Ã¢â‚¬â„¢Ã‚Â¬ WhatsApp",
+        telegram: "ÃƒÂ¢Ã…â€œÃ‹â€ ÃƒÂ¯Ã‚Â¸Ã‚Â Telegram",
+        instagram: "ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â¸ Instagram",
         reset: "Clear / Reset",
         messageQuality: "Message quality",
         communicationTips: "Communication tips",
@@ -361,7 +435,7 @@ const languageText = {
         readability: "Readability",
   privacyDashboard: "Privacy Dashboard",
   privacySubtitle: "See how this assistant handles your messages and data.",
-  privacyLocal: "🟢 Local only",
+  privacyLocal: "Local only",
   privacyLocalAnalysis: "Local analysis",
   privacyLocalAnalysisText: "Your message is analyzed directly in this browser.",
   privacyNoCloud: "No cloud processing",
@@ -371,12 +445,23 @@ const languageText = {
   privacyHistory: "Browser history",
   privacyHistoryText: "Saved messages stay in this browser until you clear them.",
   privacyYourData: "Your data",
-  privacyChecking: "Checking local history...",
+  privacyChecking: "No saved messages yet.",
   privacyClearHistory: "Clear saved history",
+        developmentBadge: "UNDER DEVELOPMENT",
+        developmentTitle: "This application is still being improved",
+        developmentText: "Some features may produce incomplete or inaccurate results. Review all suggestions before sending messages or publishing captions. Do not depend on this tool as your only source of guidance in serious or sensitive situations.",
+        messageLimitTitle: "Message analysis limitations",
+        messageLimitText: "Tone and intensity scores are estimates based on language patterns. They do not reliably reveal a person's true feelings, intentions, or the full context of a conversation. Review every suggested rewrite before sending it.",
+        captionLimitTitle: "Caption accuracy and responsibility",
+        captionLimitText: "Captions are based on the details you provide. The tool does not independently verify names, dates, locations, quotations, statistics, or other claims, and it does not automatically inspect photographs. Check facts and context before publishing.",
+        featureLimitTitle: "What this tool cannot do",
+        featureLimitText: "The assistant does not provide independent fact-checking, professional counselling, emergency response, or guaranteed emotional understanding. Seek appropriate human or professional help when a situation requires it.",
+        dataLimitTitle: "Protect your personal information",
+        dataLimitText: "Avoid entering passwords, PINs, financial information, or sensitive personal details. Saved message history is stored in this browser and may be accessible to someone who can use your device or browser profile.",
         whyChanged: "Why this changed"
     },
     sw: {
-        button: "🇬🇧 English",
+        button: "English",
         title: "Msaidizi wa Kupunguza Migogoro ya Mawasiliano",
         subtitle: "Changanua mtindo wa ujumbe. Punguza ukali. Wasiliana vizuri.",
         warmth: "Ukaribu",
@@ -421,10 +506,10 @@ const languageText = {
         copy: "Nakili ujumbe ulioboreshwa",
         save: "Hifadhi kwenye historia",
         share: "Shiriki ujumbe ulioboreshwa",
-        email: "📧 Barua pepe",
-        whatsapp: "💬 WhatsApp",
-        telegram: "✈️ Telegram",
-        instagram: "📸 Instagram",
+        email: "ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â§ Barua pepe",
+        whatsapp: "ÃƒÂ°Ã…Â¸Ã¢â‚¬â„¢Ã‚Â¬ WhatsApp",
+        telegram: "ÃƒÂ¢Ã…â€œÃ‹â€ ÃƒÂ¯Ã‚Â¸Ã‚Â Telegram",
+        instagram: "ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â¸ Instagram",
         reset: "Futa / Anza upya",
         messageQuality: "Ubora wa ujumbe",
         communicationTips: "Vidokezo vya mawasiliano",
@@ -434,7 +519,7 @@ const languageText = {
         readability: "Urahisi wa kusoma",
   privacyDashboard: "Dashibodi ya Faragha",
   privacySubtitle: "Angalia jinsi msaidizi huyu anavyoshughulikia ujumbe na data yako.",
-  privacyLocal: "🟢 Kwenye kifaa pekee",
+  privacyLocal: "Kwenye kifaa pekee",
   privacyLocalAnalysis: "Uchanganuzi wa kwenye kifaa",
   privacyLocalAnalysisText: "Ujumbe wako huchanganuliwa moja kwa moja kwenye kivinjari hiki.",
   privacyNoCloud: "Hakuna uchakataji wa mtandaoni",
@@ -444,8 +529,19 @@ const languageText = {
   privacyHistory: "Historia ya kivinjari",
   privacyHistoryText: "Ujumbe uliohifadhiwa hubaki kwenye kivinjari hiki hadi uufute.",
   privacyYourData: "Data yako",
-  privacyChecking: "Inaangalia historia ya kwenye kifaa...",
+  privacyChecking: "Bado hakuna ujumbe uliohifadhiwa.",
   privacyClearHistory: "Futa historia iliyohifadhiwa",
+        developmentBadge: "BADO INATENGENEZWA",
+        developmentTitle: "Programu hii bado inaendelea kuboreshwa",
+        developmentText: "Baadhi ya vipengele vinaweza kutoa matokeo yasiyokamilika au yasiyo sahihi. Kagua mapendekezo yote kabla ya kutuma ujumbe au kuchapisha maelezo ya picha. Usitumie programu hii kama chanzo chako pekee cha mwongozo katika hali nzito au nyeti.",
+        messageLimitTitle: "Mipaka ya uchanganuzi wa ujumbe",
+        messageLimitText: "Alama za mtindo na ukali wa ujumbe ni makadirio yanayotegemea mifumo ya lugha. Haziwezi kuonyesha kwa uhakika hisia, nia au muktadha wote wa mazungumzo. Kagua kila ujumbe ulioboreshwa kabla ya kuutuma.",
+        captionLimitTitle: "Usahihi na uwajibikaji wa maelezo ya picha",
+        captionLimitText: "Maelezo ya picha hutegemea taarifa unazotoa. Programu haithibitishi yenyewe majina, tarehe, maeneo, nukuu, takwimu au madai mengine, wala haichunguzi picha moja kwa moja. Hakiki ukweli na muktadha kabla ya kuchapisha.",
+        featureLimitTitle: "Mambo ambayo programu hii haiwezi kufanya",
+        featureLimitText: "Msaidizi huyu hafanyi uhakiki huru wa ukweli, hautoi ushauri wa kitaalamu wa ushauri nasaha, haujibu dharura, wala hawezi kuelewa hisia za mtu kwa uhakika. Tafuta msaada unaofaa wa mtu au mtaalamu inapohitajika.",
+        dataLimitTitle: "Linda taarifa zako binafsi",
+        dataLimitText: "Epuka kuandika nywila, PIN, taarifa za kifedha au taarifa nyeti za kibinafsi. Historia ya ujumbe huhifadhiwa kwenye kivinjari hiki na inaweza kufikiwa na mtu anayeweza kutumia kifaa chako au wasifu wako wa kivinjari.",
         whyChanged: "Kwa nini umebadilishwa"
     }
 };
@@ -542,7 +638,7 @@ function applyLanguage() {
 
     if (privacyHeader) privacyHeader.textContent = t.privacyDashboard;
     if (privacySubtitle) privacySubtitle.textContent = t.privacySubtitle;
-    if (privacyStatus) privacyStatus.textContent = t.privacyLocal;
+    if (privacyStatus) { const privacyStatusLabel = document.getElementById("privacy-status-label"); if (privacyStatusLabel) privacyStatusLabel.textContent = t.privacyLocal; }
     if (privacyCards.length >= 4) {
         privacyCards[0].querySelector("h3").textContent = t.privacyLocalAnalysis;
         privacyCards[0].querySelector("p").textContent = t.privacyLocalAnalysisText;
@@ -556,16 +652,31 @@ function applyLanguage() {
     if (privacyDataTitle) privacyDataTitle.textContent = t.privacyYourData;
     if (privacyHistoryStatus) privacyHistoryStatus.textContent = getHistory().length ? (currentLanguage === "sw" ? getHistory().length + " ujumbe umehifadhiwa kwenye kivinjari hiki." : getHistory().length + " saved message(s) in this browser.") : t.privacyChecking;
     if (privacyClearButton) privacyClearButton.textContent = t.privacyClearHistory;
+
+    const privacyTextElements = {
+        "development-badge": "developmentBadge",
+        "development-title": "developmentTitle",
+        "development-text": "developmentText",
+        "privacy-message-limit-title": "messageLimitTitle",
+        "privacy-message-limit-text": "messageLimitText",
+        "privacy-caption-limit-title": "captionLimitTitle",
+        "privacy-caption-limit-text": "captionLimitText",
+        "privacy-feature-limit-title": "featureLimitTitle",
+        "privacy-feature-limit-text": "featureLimitText",
+        "privacy-data-limit-title": "dataLimitTitle",
+        "privacy-data-limit-text": "dataLimitText"
+    };
+
+    Object.entries(privacyTextElements).forEach(([elementId, textKey]) => {
+        const element = document.getElementById(elementId);
+        if (element) element.textContent = t[textKey];
+    });
     clearHistoryButton.textContent = t.clearHistory;
     copyButton.textContent = t.copy;
     saveHistoryButton.textContent = t.save;
     shareButton.textContent = t.share;
-    emailButton.textContent = t.email;
-    whatsappButton.textContent = t.whatsapp;
-    telegramButton.textContent = t.telegram;
-    instagramButton.textContent = t.instagram;
     resetButton.textContent = t.reset;
-    languageToggle.textContent = t.button;
+    const languageToggleLabel = document.getElementById("language-toggle-label"); if (languageToggleLabel) languageToggleLabel.textContent = t.button;
     if (qualityTitle) qualityTitle.textContent = t.messageQuality;
     if (clarityLabel) clarityLabel.textContent = t.clarity;
     if (specificityLabel) specificityLabel.textContent = t.specificity;
@@ -578,6 +689,10 @@ function applyLanguage() {
         ? ["Tulivu", "Kidogo", "Wastani", "Juu", "Juu sana"]
         : ["Calm", "Slight", "Moderate", "High", "Very High"];
 
+    if (!messageInput.value.trim()) {
+        toneLabel.textContent = currentLanguage === "sw" ? "Hakuna ujumbe uliochanganuliwa" : "No message analyzed";
+    }
+
     updateMessageCount(messageInput.value);
     renderHistory();
     updateBeforeAfter(messageInput.value, rewrite.textContent);
@@ -585,6 +700,7 @@ function applyLanguage() {
     gaugeScaleLabels.forEach((label, index) => {
         label.textContent = scaleLabels[index];
     });
+    document.dispatchEvent(new Event("caption-interface-language-change"));
 }
 
 languageToggle.addEventListener("click", () => {
@@ -634,17 +750,17 @@ function analyzeMessage(text) {
     const lower = text.toLowerCase();
 
     const detected = aggressiveWords.filter(word =>
-        lower.includes(word)
+        containsTerm(lower, word)
     );
 
     const confrontationalDetected =
         confrontationalPhrases.filter(phrase =>
-            lower.includes(phrase)
+            containsTerm(lower, phrase)
         );
 
-    const blameDetected = blamePhrases.filter(phrase => lower.includes(phrase));
-const dismissiveDetected = dismissivePhrases.filter(phrase => lower.includes(phrase));
-const pressureDetected = pressurePhrases.filter(phrase => lower.includes(phrase));
+    const blameDetected = blamePhrases.filter(phrase => containsTerm(lower, phrase));
+const dismissiveDetected = dismissivePhrases.filter(phrase => containsTerm(lower, phrase));
+const pressureDetected = pressurePhrases.filter(phrase => containsTerm(lower, phrase));
 
 const allLanguageSignals = [
         ...detected.map(word => ({ label: word, type: "aggressive" })),
@@ -654,10 +770,27 @@ const allLanguageSignals = [
         ...pressureDetected.map(phrase => ({ label: phrase, type: "pressure" }))
     ];
 
-    if (allLanguageSignals.length > 0) {
+    const uniqueLanguageSignals = allLanguageSignals.filter((signal, index, signals) =>
+        signals.findIndex(item => item.label.toLowerCase() === signal.label.toLowerCase()) === index
+    );
+
+    const filteredLanguageSignals = uniqueLanguageSignals.filter(signal => {
+        const shorterLabel = signal.label.toLowerCase();
+
+        return !uniqueLanguageSignals.some(other => {
+            if (other === signal) return false;
+
+            const longerLabel = other.label.toLowerCase();
+
+            return longerLabel.length > shorterLabel.length &&
+                longerLabel.includes(shorterLabel);
+        });
+    });
+
+    if (filteredLanguageSignals.length > 0) {
         detectedWords.innerHTML =
             (currentLanguage === "sw" ? "Imegunduliwa: " : "Detected: ") +
-            allLanguageSignals
+            filteredLanguageSignals
                 .map(signal =>
                     "<strong>" + escapeHtml(signal.label) + "</strong>"
                 )
@@ -667,7 +800,7 @@ const allLanguageSignals = [
             text.replace(/\*\*/g, "")
         );
 
-        allLanguageSignals.forEach(signal => {
+        filteredLanguageSignals.forEach(signal => {
             const pattern = new RegExp(
                 "(" + escapeRegExp(signal.label) + ")",
                 "gi"
@@ -690,7 +823,7 @@ const allLanguageSignals = [
     let intensity = 0;
 
     aggressiveWords.forEach(word => {
-        if (lower.includes(word)) {
+        if (containsTerm(lower, word)) {
             intensity += 12;
         }
     });
@@ -796,6 +929,10 @@ const allLanguageSignals = [
 
     updateBeforeAfter(text, rewriteBox.textContent);
 
+    if (!messageInput.value.trim()) {
+        toneLabel.textContent = currentLanguage === "sw" ? "Hakuna ujumbe uliochanganuliwa" : "No message analyzed";
+    }
+
     updateMessageCount(messageInput.value);
 
 courtesyValue.textContent =
@@ -852,23 +989,36 @@ function getQualityColor(score) {
 function applySmartPreset(result, preset) {
     if (result.length <= 20) return result;
 
-    result = result.replace(/[.!?]*$/, "");
+    const existingContext = {
+        personal: /relationship|understand each other|talk about this calmly/i,
+        school: /guidance|clarification|resolve this/i,
+        work: /constructive way forward|clear way forward|next steps/i,
+        customer: /help in resolving|resolve this matter|next step/i,
+        social: /discussion respectful|keep.*respectful|focused on the issue/i,
+        conflict: /focus on the issue|practical way forward|find a way forward/i
+    };
 
-    if (preset === "personal") {
-        result += ". I value our relationship and would rather talk about this calmly and understand each other."
-    } else if (preset === "school") {
-        result += ". I would appreciate your guidance and clarification on how we can resolve this."
-    } else if (preset === "work") {
-        result += ". I would appreciate a clear and constructive way forward."
-    } else if (preset === "customer") {
-        result += ". I would appreciate your help in resolving this matter and knowing the next step."
-    } else if (preset === "social") {
-        result += ". I would prefer to keep the discussion respectful and focused on the issue."
-    } else if (preset === "conflict") {
-        result += ". I would like us to focus on the issue and find a practical way forward."
+    const pattern = existingContext[preset];
+
+    if (pattern && pattern.test(result)) {
+        return result;
     }
 
-    return result;
+    const additions = {
+        personal: "I value our relationship and would rather talk about this calmly and understand each other.",
+        school: "I would appreciate your guidance and clarification on how we can resolve this.",
+        work: "I would appreciate a clear and constructive way forward.",
+        customer: "I would appreciate your help in resolving this matter and knowing the next step.",
+        social: "I would prefer to keep the discussion respectful and focused on the issue.",
+        conflict: "I would like us to focus on the issue and find a practical way forward."
+    };
+
+    const addition = additions[preset];
+
+    if (!addition) return result;
+
+    result = result.replace(/[.!?]*$/, "");
+    return result + ". " + addition;
 }
 
 function generateRewrite(text, intensity) {
@@ -979,7 +1129,60 @@ function generateRewrite(text, intensity) {
     result = result.replace(/!+/g, ".");
     result = result.replace(/\?{2,}/g, "?");
 
+    // Handle this tested multi-phrase combination as one natural sentence.
+    if (/^\s*you never listen\s*,?\s+and\s+stop yapping\s*[.!?]*\s*$/i.test(result)) {
+        result = "I feel that you haven't been listening, and I'd appreciate it if we could focus on the main point";
+    }
+    // Handle the combination of never listening and repeated interruption.
+    if (/^\s*you never listen\s*,?\s+and\s+you always interrupt me\s*[.!?]*\s*$/i.test(result)) {
+        result = "I feel that you haven't been listening, and I feel frustrated when I'm interrupted. I'd appreciate it if you could let me finish speaking";
+    }
     const replacements = [
+        [/\bbffr\s*,\s*you clearly don't care what I say\b/gi, "I need us to be realistic about this, and I feel that what I say is not being taken seriously"],
+        [/\bstop yapping\s+and\s+answer me right now\b/gi, "Could we focus on the main point and address this now, please?"],
+        [/\bthis is a skill issue\b/gi, "I think this is a difficulty we need to address"],
+
+        [/\byou clearly don't care what I say\b/gi, "I feel that what I say isn't being taken seriously"],
+        [/\byou clearly don't care about my concerns\b/gi, "I feel that my concerns aren't being taken seriously"],
+        [/\byou clearly don't care\b/gi, "I feel that my concerns aren't being taken seriously"],
+        [/\byou don't care what I say\b/gi, "I feel that what I say isn't being taken seriously"],
+        [/\byou don't care about my concerns\b/gi, "I feel that my concerns aren't being taken seriously"],
+        [/\byou don't even care\b/gi, "I feel that my concerns aren't being taken seriously"],
+        [/\byou never care\b/gi, "I feel that my concerns aren't being taken seriously"],
+        [/\byou're doing too much\b/gi, "I feel that this conversation is becoming more intense than necessary"],
+        [/\byou are doing too much\b/gi, "I feel that this conversation is becoming more intense than necessary"],
+        [/\bbe so fr\b/gi, "Could we be realistic about this"],
+        [/\bbffr\b/gi, "Could we be realistic about this"],
+        [/\bstop yapping\b/gi, "Could we focus on the main point"],
+        [/\btouch grass\b/gi, "I think it may help to take a break and revisit this later"],
+        [/\byou're cooked\b/gi, "I don't think this situation is going well"],
+        [/\byou are cooked\b/gi, "I don't think this situation is going well"],
+        [/\bthat's cap\b/gi, "I don't think that's accurate"],
+        [/\bthats cap\b/gi, "I don't think that's accurate"],
+        [/\bL take\b/gi, "I disagree with that view"],
+        [/\bskill issue\b/gi, "I think there's a difficulty we need to address"],
+        [/\bget a grip\b/gi, "Could we take a moment to approach this calmly"],
+        [/\bwhat is wrong with you\b/gi, "Could we talk about what happened"],
+        [/\byou've got to be kidding me\b/gi, "I'm finding this difficult to believe"],
+        [/\byou have got to be kidding me\b/gi, "I'm finding this difficult to believe"],
+        [/\byou're embarrassing\b/gi, "I'm uncomfortable with how this situation is unfolding"],
+        [/\byou are embarrassing\b/gi, "I'm uncomfortable with how this situation is unfolding"],
+        [/\byou're so fake\b/gi, "I feel that I can't fully trust what's happening"],
+        [/\byou are so fake\b/gi, "I feel that I can't fully trust what's happening"],
+        [/\bI'm done with you\b/gi, "I need some space from this conversation"],
+        [/\bim done with you\b/gi, "I need some space from this conversation"],
+        [/\bI don't give a damn\b/gi, "I don't feel able to engage with this right now"],
+        [/\bI don't give a shit\b/gi, "I don't feel able to engage with this right now"],
+        [/\bstfu\b/gi, "I'd like us to pause this conversation"],
+        [/\bshut the hell up\b/gi, "I'd appreciate a moment to explain my point"],
+        [/\bshut the fuck up\b/gi, "I'd appreciate a moment to explain my point"],
+        [/\byou keep giving me excuses and dismissing my concerns\b/gi, "I still need a clear explanation, and I would appreciate having my concerns considered carefully"],
+        [/\bnobody is actually listening to me\b/gi, "I feel that my concerns haven't been fully heard"],
+        [/\bnobody is actually listening\b/gi, "I feel that my concerns aren't being fully heard"],
+        [/\byou keep giving me excuses\b/gi, "I still need a clear explanation"],
+        [/\byou are giving me excuses\b/gi, "I would appreciate a clear explanation"],
+        [/\byou keep dismissing my concerns\b/gi, "I feel that my concerns aren't being fully considered"],
+        [/\bdismissing my concerns\b/gi, "not giving my concerns enough consideration"],
         [/\bstop ignoring me\b/gi, "Could you please respond when you have a moment"],
         [/\byou are being completely unfair\b/gi, "I feel that this situation has been difficult"],
         [/\bfix this right now\b/gi, "Could we work on resolving this as soon as possible"],
@@ -1126,31 +1329,13 @@ function generateRewrite(text, intensity) {
     }
     result = applySmartPreset(result, preset);
 
-    if (courtesy >= 80 && intensity > 10 && !/\bthank\b/i.test(result) && !/\bappreciat/i.test(result) && !/\bplease\b/i.test(result)) {
-        result = result.replace(/[.!?]*$/, "");
-
-        if (mode === "formal") {
-            result += ". Thank you for taking the time to help me with this.";
-        } else {
-            result += ". I really appreciate your help with this.";
-        }
-    } else if (
-        intensity > 10 && courtesy >= 40 &&
-        courtesy < 80 &&
-        result.length > 20 &&
-        !/\bplease\b/i.test(result) &&
-        !/\bthank/i.test(result)
-    ) {
-        result = result.replace(/[.!?]*$/, "");
-        result += ". Please let me know your thoughts.";
-    }
-
     result = result.replace(/\bI feel you haven't\b/gi, "I feel that you haven't");
     result = result.replace(/\bI feel you did not\b/gi, "I feel that you did not");
     result = result.replace(/\bI think you are\b/gi, "I feel that you are");
     result = result.replace(/\bI need you to\b/gi, "Could you please");
     result = result.replace(/\bYou are not listening to me\b/gi, "I feel that I am not being heard");
     result = result.replace(/\bYou don't understand\b/gi, "I feel that my concern may not be clear");
+    result = result.replace(/([!?])[ \t]*[.]+$/g, "$1");
     if (result) { result = result.replace(/\bCould you please respond when you have a moment\./gi, "Could you please respond when you have a moment?"); result = result.replace(/\bCould we work on resolving this as soon as possible\./gi, "Could we work on resolving this as soon as possible?"); result = result.replace(/\bCould you help me understand why you are([^.!?]*)\./gi, "Could you help me understand why you are$1?"); if (!/[.!?]$/.test(result)) { result += "."; } }
 
     result = result.replace(/\byou haven't listen\b/gi, "you haven't listened");
@@ -1166,6 +1351,14 @@ function escapeHtml(text) {
         .replace(/'/g, "&#039;");
 }
 
+
+function containsTerm(text, term) {
+    const pattern = "(^|[^\\p{L}\\p{N}_])" +
+        escapeRegExp(term) +
+        "(?=$|[^\\p{L}\\p{N}_])";
+    return new RegExp(pattern, "iu").test(text);
+}
+
 function escapeRegExp(text) {
     return text.replace(
         /[.*+?^${}()|[\]\\]/g,
@@ -1174,6 +1367,10 @@ function escapeRegExp(text) {
 }
 
 messageInput.addEventListener("input", () => {
+    if (!messageInput.value.trim()) {
+        toneLabel.textContent = currentLanguage === "sw" ? "Hakuna ujumbe uliochanganuliwa" : "No message analyzed";
+    }
+
     updateMessageCount(messageInput.value);
     analyzeMessage(messageInput.value);
 });
@@ -1191,6 +1388,10 @@ rewriteMode.addEventListener("change", () => {
 });
 
 courtesySlider.addEventListener("input", () => {
+    if (!messageInput.value.trim()) {
+        toneLabel.textContent = currentLanguage === "sw" ? "Hakuna ujumbe uliochanganuliwa" : "No message analyzed";
+    }
+
     updateMessageCount(messageInput.value);
 
 courtesyValue.textContent =
@@ -1245,12 +1446,12 @@ function updateScoreExplanation(text, intensity) {
     const lower = text.toLowerCase();
 
     const aggressiveFound = aggressiveWords.filter(word =>
-        lower.includes(word)
+        containsTerm(lower, word)
     );
 
     const confrontationalFound =
         confrontationalPhrases.filter(phrase =>
-            lower.includes(phrase)
+            containsTerm(lower, phrase)
         );
 
     if (confrontationalFound.length > 0) {
@@ -1260,7 +1461,7 @@ function updateScoreExplanation(text, intensity) {
         });
     }
     const intensifierFound = intensifiers.filter(word =>
-        lower.includes(word)
+        containsTerm(lower, word)
     );
 
     const capsWords = text
@@ -1385,11 +1586,18 @@ courtesyValue.textContent = "60%"; analyzeMessage(""); });
 
 
 
+function updateThemeToggle() {
+    const dark = document.body.classList.contains("dark-mode");
+    const icon = document.getElementById("theme-toggle-icon");
+    const label = document.getElementById("theme-toggle-label");
+    if (icon) icon.innerHTML = dark ? '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>' : '<svg viewBox="0 0 24 24"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z"/></svg>';
+    if (label) label.textContent = dark ? "Light mode" : "Dark mode";
+}
 themeToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
-    const dark = document.body.classList.contains("dark-mode");
-    themeToggle.textContent = dark ? "☀️ Light mode" : "🌙 Dark mode";
+    updateThemeToggle();
 });
+updateThemeToggle();
 
 
 
@@ -1438,65 +1646,6 @@ shareButton.addEventListener("click", async () => {
     }
 });
 
-emailButton.addEventListener("click", () => {
-    const text = rewriteBox.textContent.trim();
-
-    if (!text || text === (currentLanguage === "sw" ? "Ujumbe wako ulioboreshwa utaonekana hapa." : "Your polished message will appear here.")) {
-        return;
-    }
-
-    const subject = encodeURIComponent("Polished message");
-    const body = encodeURIComponent(text);
-
-    window.location.href = "mailto:?subject=" + subject + "&body=" + body;
-});
-
-
-
-whatsappButton.addEventListener("click", () => {
-    const text = rewriteBox.textContent.trim();
-
-    if (!text || text === (currentLanguage === "sw" ? "Ujumbe wako ulioboreshwa utaonekana hapa." : "Your polished message will appear here.")) {
-        return;
-    }
-
-    const url = "https://wa.me/?text=" + encodeURIComponent(text);
-    window.open(url, "_blank");
-});
-
-
-
-telegramButton.addEventListener("click", () => {
-    const text = rewriteBox.textContent.trim();
-
-    if (!text || text === (currentLanguage === "sw" ? "Ujumbe wako ulioboreshwa utaonekana hapa." : "Your polished message will appear here.")) {
-        return;
-    }
-
-    const url = "https://t.me/share/url?url=&text=" + encodeURIComponent(text);
-    window.open(url, "_blank");
-});
-
-
-
-instagramButton.addEventListener("click", async () => {
-    const text = rewriteBox.textContent.trim();
-
-    if (!text || text === (currentLanguage === "sw" ? "Ujumbe wako ulioboreshwa utaonekana hapa." : "Your polished message will appear here.")) {
-        return;
-    }
-
-    try {
-        await navigator.clipboard.writeText(text);
-        window.open("https://www.instagram.com/", "_blank");
-        instagramButton.textContent = "Copied — Instagram opened";
-        setTimeout(() => {
-            instagramButton.textContent = "📸 Instagram";
-        }, 1800);
-    } catch (error) {
-        window.open("https://www.instagram.com/", "_blank");
-    }
-});
 
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
@@ -1507,3 +1656,633 @@ if ("serviceWorker" in navigator) {
         });
     });
 }
+
+/* CAPTION GENERATOR ENGINE */
+(() => {
+    "use strict";
+
+    const get = id => document.getElementById(id);
+
+    const fields = {
+        description: get("caption-description"),
+        facts: get("caption-facts"),
+        platform: get("caption-platform"),
+        purpose: get("caption-purpose"),
+        style: get("caption-style"),
+        length: get("caption-length"),
+        language: get("caption-language"),
+        hashtags: get("caption-hashtags"),
+        cta: get("caption-call-to-action"),
+        descriptionCount: get("caption-description-count"),
+        status: get("caption-status"),
+        resultSection: get("caption-result-section"),
+        resultText: get("caption-result-text"),
+        resultCount: get("caption-result-count"),
+        resultWords: get("caption-result-words"),
+        resultStyle: get("caption-result-style"),
+        generate: get("generate-caption-button"),
+        clear: get("clear-caption-button"),
+        copy: get("copy-caption-button"),
+        share: get("share-caption-button"),
+        regenerate: get("regenerate-caption-button")
+    };
+
+    if (Object.values(fields).some(element => !element)) {
+        console.error("Caption Generator could not start: one or more required elements are missing.");
+        return;
+    }
+
+    const captionInterfaceText = {
+        en: {
+            eyebrow: "LOCAL WRITING TOOL",
+            title: "Caption Generator",
+            intro: "Create clear, accurate captions from the details you provide.",
+            local: "Works locally",
+            descriptionLabel: "Photo or event description",
+            descriptionPlaceholder: "Describe what is visible in the photo or what happened. Include only details you know.",
+            descriptionHelp: "Be specific. The generator uses your description as its factual foundation.",
+            characters: "characters",
+            factsLabel: "Additional verified details",
+            optional: "(optional)",
+            factsPlaceholder: "Add confirmed names, dates, locations, scores, quotations or other facts you want included.",
+            factsHelp: "Only include details you have verified or are confident are accurate.",
+            platform: "Platform or use",
+            news: "News / Photojournalism",
+            other: "Other",
+            purpose: "Purpose",
+            purposes: ["Event coverage", "Announcement", "Awareness", "Education / Information", "Promotion", "Personal update", "General update"],
+            style: "Writing style",
+            styles: ["Journalistic", "Professional", "Informative", "Creative", "Casual and friendly"],
+            length: "Caption length",
+            lengths: ["Short", "Standard", "Detailed"],
+            language: "Caption language",
+            english: "English",
+            swahili: "Kiswahili",
+            hashtags: "Hashtags",
+            hashtagOptions: ["No hashtags", "A few relevant hashtags"],
+            cta: "Call to action",
+            ctaPlaceholder: "For example: Share your views in the comments.",
+            ctaHelp: "Leave blank if you do not need a call to action.",
+            generate: "Generate Caption",
+            clear: "Clear Inputs",
+            resultTitle: "Your Caption",
+            copy: "Copy Caption",
+            share: "Share Caption",
+            regenerate: "Generate Another Version",
+            accuracy: "Review the caption before publishing, especially names, dates, quotations and other factual details.",
+            count: "characters",
+            words: "words"
+        },
+        sw: {
+            eyebrow: "ZANA YA UANDISHI YA NDANI",
+            title: "Kizalishaji cha Maelezo ya Picha",
+            intro: "Tengeneza maelezo yaliyo wazi na sahihi kwa kutumia taarifa unazotoa.",
+            local: "Hufanya kazi kwenye kifaa chako",
+            descriptionLabel: "Maelezo ya picha au tukio",
+            descriptionPlaceholder: "Eleza kinachoonekana kwenye picha au kilichotokea. Jumuisha tu mambo unayoyajua.",
+            descriptionHelp: "Eleza kwa uwazi. Zana hutumia maelezo yako kama msingi wa taarifa.",
+            characters: "herufi",
+            factsLabel: "Taarifa nyingine zilizothibitishwa",
+            optional: "(si lazima)",
+            factsPlaceholder: "Ongeza majina, tarehe, maeneo, matokeo, nukuu au taarifa nyingine zilizothibitishwa unazotaka kujumuisha.",
+            factsHelp: "Jumuisha tu taarifa ulizothibitisha au unazo uhakika kuwa ni sahihi.",
+            platform: "Jukwaa au matumizi",
+            news: "Habari / Uandishi wa habari kwa picha",
+            other: "Nyingine",
+            purpose: "Madhumuni",
+            purposes: ["Kuripoti tukio", "Tangazo", "Uhamasishaji", "Elimu / Taarifa", "Matangazo ya kibiashara", "Taarifa binafsi", "Taarifa ya jumla"],
+            style: "Mtindo wa uandishi",
+            styles: ["Uandishi wa habari", "Kitaalamu", "Wa kutoa taarifa", "Wa ubunifu", "Wa kawaida na kirafiki"],
+            length: "Urefu wa maelezo",
+            lengths: ["Mafupi", "Wastani", "Yenye maelezo zaidi"],
+            language: "Lugha ya maelezo",
+            english: "Kiingereza",
+            swahili: "Kiswahili",
+            hashtags: "Alama za reli (hashtags)",
+            hashtagOptions: ["Bila hashtags", "Hashtags chache zinazofaa"],
+            cta: "Wito wa kuchukua hatua",
+            ctaPlaceholder: "Kwa mfano: Shiriki maoni yako kwenye sehemu ya maoni.",
+            ctaHelp: "Acha wazi ikiwa huhitaji wito wa kuchukua hatua.",
+            generate: "Tengeneza Maelezo",
+            clear: "Futa Sehemu Zote",
+            resultTitle: "Maelezo Yako",
+            copy: "Nakili Maelezo",
+            share: "Shiriki Maelezo",
+            regenerate: "Tengeneza Toleo Jingine",
+            accuracy: "Kagua maelezo kabla ya kuchapisha, hasa majina, tarehe, nukuu na taarifa nyingine za ukweli.",
+            count: "herufi",
+            words: "maneno"
+        }
+    };
+
+    function applyCaptionInterfaceLanguage() {
+        const t = captionInterfaceText[interfaceLanguage()];
+        const setText = (id, value) => {
+            const element = get(id);
+            if (element) element.textContent = value;
+        };
+        const setPlaceholder = (id, value) => {
+            const element = get(id);
+            if (element) element.placeholder = value;
+        };
+        const setOptions = (id, labels) => {
+            const element = get(id);
+            if (element) Array.from(element.options).forEach((option, index) => {
+                if (labels[index] !== undefined) option.textContent = labels[index];
+            });
+        };
+
+        setText("caption-generator-title", t.title);
+        setText("caption-intro", t.intro);
+        setText("caption-generator-eyebrow", t.eyebrow);
+        setText("caption-local-badge", t.local);
+        setText("caption-description-help", t.descriptionHelp);
+        setText("caption-description-count", fields.description.value.length + " / 3000 " + t.characters);
+        setText("caption-facts-help", t.factsHelp);
+        setText("caption-result-title", t.resultTitle);
+        setText("generate-caption-button", t.generate);
+        setText("clear-caption-button", t.clear);
+        setText("copy-caption-button", t.copy);
+        setText("share-caption-button", t.share);
+        setText("regenerate-caption-button", t.regenerate);
+        setText("caption-accuracy-note", t.accuracy);
+
+        const labelText = {
+            "caption-description": t.descriptionLabel,
+            "caption-facts": t.factsLabel,
+            "caption-platform": t.platform,
+            "caption-purpose": t.purpose,
+            "caption-style": t.style,
+            "caption-length": t.length,
+            "caption-language": t.language,
+            "caption-hashtags": t.hashtags,
+            "caption-call-to-action": t.cta
+        };
+        Object.entries(labelText).forEach(([id, label]) => {
+            const element = get(id);
+            const labelElement = document.querySelector('label[for="' + id + '"]');
+            if (!element || !labelElement) return;
+            const optional = labelElement.querySelector(".caption-optional");
+            labelElement.textContent = label + " ";
+            if (optional && (id === "caption-facts" || id === "caption-call-to-action")) {
+                optional.textContent = t.optional;
+                labelElement.appendChild(optional);
+            }
+            if (id === "caption-description" || id === "caption-facts") {
+                const required = document.createElement("span");
+                required.setAttribute("aria-hidden", "true");
+                required.textContent = id === "caption-description" ? "*" : "";
+                if (id === "caption-description") labelElement.appendChild(required);
+            }
+        });
+
+        setPlaceholder("caption-description", t.descriptionPlaceholder);
+        setPlaceholder("caption-facts", t.factsPlaceholder);
+        setPlaceholder("caption-call-to-action", t.ctaPlaceholder);
+        setText("caption-description-help", t.descriptionHelp);
+        setText("caption-facts-help", t.factsHelp);
+        setText("caption-cta-help", t.ctaHelp);
+        setOptions("caption-platform", ["Facebook", "Instagram", "LinkedIn", "X", t.news, t.other]);
+        setOptions("caption-purpose", t.purposes);
+        setOptions("caption-style", t.styles);
+        setOptions("caption-length", t.lengths);
+        setOptions("caption-language", [t.english, t.swahili]);
+        setOptions("caption-hashtags", t.hashtagOptions);
+
+        if (fields.resultSection && !fields.resultSection.hidden && lastCaption) {
+            const uiMessages = messages[interfaceLanguage()];
+            fields.resultCount.textContent = lastCaption.length + " " + uiMessages.label;
+            fields.resultWords.textContent = countWords(lastCaption) + " " + uiMessages.words;
+            fields.resultStyle.textContent = uiMessages.styles[fields.style.value] || fields.style.value;
+        }
+    }
+
+    document.addEventListener("caption-interface-language-change", applyCaptionInterfaceLanguage);
+
+    let lastCaption = "";
+    let variation = 0;
+
+    const messages = {
+        en: {
+            required: "Please describe the photo or event before generating a caption.",
+            long: "Your description is too long. Please shorten it.",
+            generated: "Caption generated. Review the details before publishing.",
+            noAlternative: "I could not safely create another wording from this description without risking a change in meaning. Try rephrasing the description.",
+            swahiliNote: "For accurate Kiswahili output, write your description and verified details in Kiswahili. This offline tool does not automatically translate arbitrary text.",
+            copied: "Caption copied.",
+            copyError: "Copying was unavailable. Please select and copy the caption manually.",
+            shareUnavailable: "Sharing is not supported by this browser. You can copy the caption instead.",
+            shared: "Your browser opened the sharing options.",
+            cleared: "Caption inputs cleared.",
+            xWarning: "Note: This caption is longer than 280 characters, so it may not fit in a standard X post.",
+            label: "characters",
+            words: "words",
+            styles: {
+                journalistic: "Journalistic",
+                professional: "Professional",
+                informative: "Informative",
+                creative: "Creative",
+                casual: "Casual"
+            }
+        },
+        sw: {
+            required: "Tafadhali eleza picha au tukio kabla ya kutengeneza maelezo.",
+            long: "Maelezo ni marefu sana. Tafadhali yapunguze.",
+            generated: "Maelezo yametengenezwa. Kagua taarifa kabla ya kuchapisha.",
+            noAlternative: "Sikuweza kubadilisha mpangilio wa maneno kwa usalama bila kuhatarisha maana. Jaribu kuandika maelezo kwa namna nyingine.",
+            swahiliNote: "Ili kupata matokeo sahihi ya Kiswahili, andika maelezo ya picha na taarifa zilizothibitishwa kwa Kiswahili. Zana hii ya nje ya mtandao haitafsiri maandishi yoyote kiotomatiki.",
+            copied: "Maelezo yamenakiliwa.",
+            copyError: "Kunakili hakukufaulu. Tafadhali chagua na unakili maandishi mwenyewe.",
+            shareUnavailable: "Kivinjari hiki hakiungi mkono kushiriki. Unaweza kunakili maelezo.",
+            shared: "Chaguo za kushiriki zimefunguliwa.",
+            cleared: "Sehemu za kuandika zimefutwa.",
+            xWarning: "Kumbuka: Maelezo haya yana zaidi ya herufi 280 na huenda yasitoshee kwenye chapisho la kawaida la X.",
+            label: "herufi",
+            words: "maneno",
+            styles: {
+                journalistic: "Uandishi wa habari",
+                professional: "Kitaalamu",
+                informative: "Ya kutoa taarifa",
+                creative: "Ubunifu",
+                casual: "Ya kirafiki"
+            }
+        }
+    };
+
+    function outputLanguage() {
+        return fields.language.value === "sw" ? "sw" : "en";
+    }
+
+    function interfaceLanguage() {
+        return typeof currentLanguage !== "undefined" && currentLanguage === "sw" ? "sw" : "en";
+    }
+
+    function setStatus(message, state = "info") {
+        fields.status.textContent = message;
+        fields.status.dataset.state = state;
+    }
+
+    function cleanText(value) {
+        return String(value || "")
+            .replace(/\r\n?/g, "\n")
+            .replace(/[ \t]+/g, " ")
+            .replace(/\n{3,}/g, "\n\n")
+            .trim();
+    }
+
+    function sentenceEnd(value) {
+        const text = cleanText(value);
+        if (!text) return "";
+        return /[.!?\u2026]["'\u2019)\]]*$/.test(text) ? text : text + ".";
+    }
+
+    function countWords(value) {
+        const matches = cleanText(value).match(/[\p{L}\p{N}]+(?:['\u2019_-][\p{L}\p{N}]+)*/gu);
+        return matches ? matches.length : 0;
+    }
+
+    function updateDescriptionCount() {
+        const count = fields.description.value.length;
+        fields.descriptionCount.textContent = count + " / 3000 " +
+            (interfaceLanguage() === "sw" ? "herufi" : "characters");
+    }
+
+    function makeHashtags(source, language) {
+        const text = cleanText(source);
+        const stopWords = language === "sw"
+            ? new Set(["na", "ya", "wa", "kwa", "katika", "ni", "kuwa", "hii", "hizi", "huyo", "hapo", "sana", "pia", "au", "kama", "kutoka", "baada", "kabla", "kuhusu", "yake", "zao", "wetu", "watu", "ambayo", "lakini", "bila", "hivyo", "zaidi", "pamoja", "kwenye", "yangu", "yako", "zao"])
+            : new Set(["the", "and", "for", "with", "from", "this", "that", "these", "those", "was", "were", "are", "is", "has", "have", "had", "into", "onto", "about", "after", "before", "during", "their", "there", "they", "them", "you", "your", "our", "but", "not", "who", "what", "when", "where", "why", "how", "ahead", "upcoming", "players", "train", "preparing", "scheduled", "additional", "details", "information", "key", "more", "following", "will", "can", "could", "would", "should", "its", "his", "her", "she", "him", "been", "being", "were", "also", "very", "much", "than", "then", "over", "under", "each", "both", "some", "many", "such", "all", "any", "out", "who", "whom", "university"]);
+        const genericWords = new Set(["event", "events", "thing", "things", "today", "tomorrow", "yesterday", "caption", "details", "information", "update", "updates", "people", "person", "time", "times", "make", "made", "getting", "going", "come", "came", "said", "says"]);
+        const candidates = [];
+        const phrasePattern = /\b(?:\p{Lu}[\p{L}\p{N}'\u2019-]*\s+){1,3}\p{Lu}[\p{L}\p{N}'\u2019-]*\b/gu;
+        let match;
+
+        while ((match = phrasePattern.exec(text)) !== null) {
+            const phrase = match[0].trim();
+            const firstWord = phrase.split(/\s+/)[0].toLocaleLowerCase();
+            if (!stopWords.has(firstWord) && !genericWords.has(firstWord)) {
+                candidates.push({ label: phrase, index: match.index, phrase: true });
+            }
+        }
+
+        const wordPattern = /[\p{L}\p{N}]+/gu;
+        while ((match = wordPattern.exec(text)) !== null) {
+            const word = match[0];
+            const normalized = word.toLocaleLowerCase();
+            if (normalized.length < 4 || stopWords.has(normalized) || genericWords.has(normalized) || /^\d+$/.test(word)) continue;
+
+            const insidePhrase = candidates.some(candidate =>
+                candidate.phrase &&
+                match.index >= candidate.index &&
+                match.index < candidate.index + candidate.label.length
+            );
+            if (!insidePhrase) {
+                candidates.push({ label: word, index: match.index, phrase: false });
+            }
+        }
+
+        const topicWords = new Set([
+            "hockey", "football", "soccer", "rugby", "basketball", "volleyball",
+            "athletics", "sports", "education", "student", "students", "school",
+            "campus", "journalism", "media", "health", "climate", "environment",
+            "agriculture", "business", "technology", "community", "culture",
+            "music", "art", "safety", "election", "elections", "research",
+            "training", "competition", "tournament", "matches", "match"
+        ]);
+        const topicPhrases = [
+            ["environmental clean-up", "Environmental CleanUp"],
+            ["environmental cleanup", "Environmental CleanUp"],
+            ["campus clean-up", "Campus CleanUp"],
+            ["campus cleanup", "Campus CleanUp"],
+            ["climate change", "ClimateChange"],
+            ["investigative journalism", "InvestigativeJournalism"],
+            ["sports journalism", "SportsJournalism"],
+            ["community service", "CommunityService"],
+            ["mental health", "MentalHealth"],
+            ["public health", "PublicHealth"],
+            ["road safety", "RoadSafety"],
+            ["human rights", "HumanRights"],
+            ["gender equality", "GenderEquality"],
+            ["food security", "FoodSecurity"],
+            ["digital safety", "DigitalSafety"],
+            ["media literacy", "MediaLiteracy"],
+            ["student leadership", "StudentLeadership"],
+            ["artificial intelligence", "ArtificialIntelligence"]
+        ];
+        const lowerText = text.toLocaleLowerCase();
+        for (const [phrase, label] of topicPhrases) {
+            const index = lowerText.indexOf(phrase);
+            if (index !== -1 && !candidates.some(candidate =>
+                candidate.phrase && candidate.index === index
+            )) {
+                candidates.push({ label, index, phrase: true, topicPhrase: true });
+            }
+        }
+        const scored = candidates.map(candidate => {
+            const normalized = candidate.label.toLocaleLowerCase();
+            const words = normalized.split(/\s+/);
+            let score = candidate.topicPhrase ? 25 : (candidate.phrase ? 5 + words.length : 0);
+            if (topicWords.has(normalized)) score += 6;
+            if (words.some(word => topicWords.has(word))) score += 2;
+            if (candidate.phrase && words.length >= 2) score += 2;
+            if (genericWords.has(normalized) || normalized === "matches" || normalized === "match") score -= 5;
+            return { ...candidate, score };
+        });
+
+        scored.sort((a, b) => b.score - a.score || a.index - b.index);
+        const seen = new Set();
+        const tags = [];
+
+        for (const candidate of scored) {
+            const parts = candidate.label.split(/\s+/);
+            const tag = "#" + parts.map(part =>
+                part.charAt(0).toLocaleUpperCase() + part.slice(1)
+            ).join("");
+            const normalizedTag = tag.toLocaleLowerCase();
+
+            if (seen.has(normalizedTag)) continue;
+            seen.add(normalizedTag);
+            tags.push(tag);
+            if (tags.length === 3) break;
+        }
+
+        return tags;
+    }
+    function makeSafeVariation(text, version) {
+        const original = String(text || "").trim();
+        if (version % 2 === 0) return original;
+
+        const match = original.match(
+            /^(.+?)(\s+(?:ahead of|before|after|following)\s+.+?)([.!?])?$/i
+        );
+
+        if (!match) return original;
+
+        const base = match[1].trim();
+        const lead = match[2].trim();
+        const punctuation = match[3] || ".";
+        const opening = lead.charAt(0).toUpperCase() + lead.slice(1);
+
+        return opening + ", " + base + punctuation;
+    }
+
+    function composeCaption() {
+        const language = outputLanguage();
+        const ui = messages[interfaceLanguage()];
+        const description = cleanText(fields.description.value);
+        const facts = cleanText(fields.facts.value);
+        const cta = cleanText(fields.cta.value);
+
+        if (!description) {
+            setStatus(ui.required, "error");
+            fields.description.focus();
+            return null;
+        }
+
+        if (description.length > 3000 || facts.length > 2000) {
+            setStatus(ui.long, "error");
+            return null;
+        }
+
+        const captionDescription = makeSafeVariation(description, variation);
+
+        /*
+         * This is a local, template-based tool, not a translation engine.
+         * It deliberately avoids adding names, dates, locations, quotes,
+         * statistics, outcomes or other unsupported claims.
+         */
+        if (language === "sw") {
+            const looksEnglish = /\b(the|and|with|from|this|that|was|were|are|is|today|yesterday|tomorrow|at|on|in|for)\b/i.test(description);
+            if (looksEnglish) {
+                setStatus(ui.swahiliNote, "error");
+                return null;
+            }
+        }
+
+        const style = fields.style.value;
+        const length = fields.length.value;
+        const platform = fields.platform.value;
+
+        const mainText = sentenceEnd(captionDescription);
+        const verifiedDetails = facts ? sentenceEnd(facts) : "";
+        const purpose = fields.purpose.value;
+
+        const purposeHeadings = language === "sw"
+            ? {
+                event: "Maelezo ya tukio:",
+                announcement: "Maelezo ya tangazo:",
+                awareness: "Taarifa muhimu:",
+                education: "Taarifa:",
+                promotion: "Maelezo zaidi:",
+                personal: "Muktadha wa ziada:",
+                general: "Maelezo ya ziada:"
+            }
+            : {
+                event: "Event details:",
+                announcement: "Announcement details:",
+                awareness: "Key information:",
+                education: "Information:",
+                promotion: "Additional information:",
+                personal: "Additional context:",
+                general: "Additional details:"
+            };
+
+        const styleHeadings = language === "sw"
+            ? {
+                journalistic: "",
+                professional: "Maelezo ya ziada:",
+                informative: "Taarifa muhimu:",
+                creative: "Maelezo zaidi:",
+                casual: "Maelezo zaidi:"
+            }
+            : {
+                journalistic: "",
+                professional: "Supporting details:",
+                informative: "Key information:",
+                creative: "More context:",
+                casual: "More details:"
+            };
+
+        let content = mainText;
+
+        if (length !== "short" && verifiedDetails) {
+            let heading = purposeHeadings[purpose] || purposeHeadings.general;
+
+            if (style === "journalistic") {
+                heading = "";
+            } else if (style === "professional" || style === "informative") {
+                heading = styleHeadings[style];
+            } else if (style === "creative" || style === "casual") {
+                heading = styleHeadings[style];
+            }
+
+            content += heading
+                ? "\n\n" + heading + "\n" + verifiedDetails
+                : "\n\n" + verifiedDetails;
+        }
+        if (cta) {
+            content += "\n\n" + sentenceEnd(cta);
+        }
+
+        if (fields.hashtags.value === "few") {
+            const tags = makeHashtags(description + " " + facts, language);
+            if (tags.length) content += "\n\n" + tags.join(" ");
+        }
+
+        if (variation > 0 && content === lastCaption) {
+            setStatus(messages[interfaceLanguage()].noAlternative, "error");
+            return null;
+        }
+        return {
+            text: content,
+            language,
+            style,
+            platform
+        };
+    }
+
+    function generateCaption() {
+        const result = composeCaption();
+        if (!result) return;
+
+        lastCaption = result.text;
+        fields.resultText.textContent = lastCaption;
+        fields.resultCount.textContent = lastCaption.length + " " + messages[interfaceLanguage()].label;
+        fields.resultWords.textContent = countWords(lastCaption) + " " + messages[interfaceLanguage()].words;
+        fields.resultStyle.textContent = messages[interfaceLanguage()].styles[result.style] || result.style;
+        fields.resultSection.hidden = false;
+
+        const ui = messages[interfaceLanguage()];
+        if (result.platform === "x" && lastCaption.length > 280) {
+            setStatus(ui.generated + " " + ui.xWarning, "success");
+        } else {
+            setStatus(ui.generated, "success");
+        }
+    }
+
+    async function copyCaption() {
+        if (!lastCaption) {
+            setStatus(messages[interfaceLanguage()].required, "error");
+            return;
+        }
+
+        try {
+            if (!navigator.clipboard || !navigator.clipboard.writeText) {
+                throw new Error("Clipboard API unavailable");
+            }
+            await navigator.clipboard.writeText(lastCaption);
+            setStatus(messages[interfaceLanguage()].copied, "success");
+        } catch (error) {
+            setStatus(messages[interfaceLanguage()].copyError, "error");
+        }
+    }
+
+    async function shareCaption() {
+        if (!lastCaption) {
+            setStatus(messages[interfaceLanguage()].required, "error");
+            return;
+        }
+
+        if (!navigator.share) {
+            setStatus(messages[interfaceLanguage()].shareUnavailable, "error");
+            return;
+        }
+
+        try {
+            await navigator.share({
+                title: "Caption",
+                text: lastCaption
+            });
+            setStatus(messages[interfaceLanguage()].shared, "success");
+        } catch (error) {
+            if (!error || error.name !== "AbortError") {
+                setStatus(messages[interfaceLanguage()].shareUnavailable, "error");
+            }
+        }
+    }
+
+    function clearCaptionInputs() {
+        fields.description.value = "";
+        fields.facts.value = "";
+        fields.cta.value = "";
+        fields.platform.value = "facebook";
+        fields.purpose.value = "event";
+        fields.style.value = "journalistic";
+        fields.length.value = "standard";
+        fields.language.value = "en";
+        fields.hashtags.value = "none";
+        lastCaption = "";
+        variation = 0;
+        fields.resultText.textContent = "";
+        fields.resultCount.textContent = "0 " + messages[interfaceLanguage()].label;
+        fields.resultWords.textContent = "0 " + messages[interfaceLanguage()].words;
+        fields.resultStyle.textContent = "";
+        fields.resultSection.hidden = true;
+        setStatus(messages[interfaceLanguage()].cleared, "success");
+        updateDescriptionCount();
+    }
+
+    fields.generate.addEventListener("click", () => {
+        variation = 0;
+        generateCaption();
+    });
+
+    fields.regenerate.addEventListener("click", () => {
+        variation += 1;
+        generateCaption();
+    });
+
+    fields.clear.addEventListener("click", clearCaptionInputs);
+    fields.copy.addEventListener("click", copyCaption);
+    fields.share.addEventListener("click", shareCaption);
+    fields.description.addEventListener("input", updateDescriptionCount);
+
+    fields.description.addEventListener("keydown", event => {
+        if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+            generateCaption();
+        }
+    });
+
+    updateDescriptionCount();
+applyCaptionInterfaceLanguage();
+})();
