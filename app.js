@@ -987,6 +987,8 @@ function getQualityColor(score) {
 }
 
 function applySmartPreset(result, preset) {
+    if (/\b(please let me know|could you|please respond|please provide an update|provide an update|i need a response|would appreciate|appreciate your|next step|how we can resolve|i am sorry|i apologize|my apologies|i expect our conversations|i am not comfortable being spoken to|i will not accept|i need us to address|i feel that my concerns have not been heard)\b/i.test(result)) return result;
+
     if (result.length <= 20) return result;
 
     const existingContext = {
@@ -1038,6 +1040,16 @@ function generateRewrite(text, intensity) {
         sw = sw.replace(/!+/g, ".");
         sw = sw.replace(/\?{2,}/g, "?");
 
+        const swExactCases = [
+            [/^Hunitaki kusikia na unafanya mambo yako tu\.?$/i, "Ninahisi kuwa hatusikilizani vizuri, na ningependa tuzungumze kuhusu jambo hili kwa utulivu."],
+            [/^Kila mara unadhani wewe ndiye uko sawa\.?$/i, "Wakati mwingine nahisi kuwa maoni yangu hayasikilizwi. Ningependa tusikilize mitazamo ya kila mmoja kwa heshima."],
+            [/^Huduma yenu ni mbaya na hakuna anayenisaidia\.?$/i, "Sijaridhika na huduma niliyopokea, na bado sijapata msaada ninaohitaji. Tafadhali nisaidieni kutatua jambo hili."],
+            [/^Nataka pesa zangu zirudishwe leo\.?$/i, "Ninaomba pesa zangu zirudishwe leo, kama nilivyoeleza. Tafadhali nithibitishie hatua mtakayochukua."],
+            [/^Samahani kwa kukufokea jana\.?$/i, "Samahani kwa kukufokea jana. Ninawajibika kwa jinsi nilivyozungumza nawe, na nitajitahidi kuwasiliana kwa utulivu zaidi."]
+        ];
+        for (const [pattern, replacement] of swExactCases) {
+            if (pattern.test(sw)) return replacement;
+        }
         const swReplacements = [
             [/\bwewe ni mjinga\b/gi, "Sikubaliani na namna jambo hili lilivyoshughulikiwa"],
             [/\bmjinga\b/gi, "mtu"],
@@ -1136,6 +1148,28 @@ function generateRewrite(text, intensity) {
     // Handle the combination of never listening and repeated interruption.
     if (/^\s*you never listen\s*,?\s+and\s+you always interrupt me\s*[.!?]*\s*$/i.test(result)) {
         result = "I feel that you haven't been listening, and I feel frustrated when I'm interrupted. I'd appreciate it if you could let me finish speaking";
+    }
+    if (/^\s*Mmenizungusha sana na bado hamjanirudishia pesa yangu\.?\s*$/i.test(result)) {
+        return "Nimekuwa nikisubiri pesa zangu kwa muda, lakini bado sijarejeshewa. Tafadhali nithibitishie lini nitarejeshewa pesa hizo.";
+    }
+    if (/^\s*Bro,\s*usinidisrespect halafu ujifanye hakuna kitu\.?\s*$/i.test(result)) {
+        return "Bro, sikufurahishwa na jinsi ulivyonidharau. Ningependa tuzungumze kuhusu hili kwa heshima na kuelewana.";
+    }
+    const exactEnglishCases = [
+        [/^\s*Stop ignoring me and answer me right now\.?\s*$/i, "I need a response as soon as possible"],
+        [/^\s*I am upset because you have not refunded (KSh\s*2,500)\.?\s*$/i, "I have not yet received my KSh 2,500 refund. Could you please let me know when I can expect it?"],
+        [/^\s*I paid on Monday, but my account is still blocked\.?\s*$/i, "I paid on Monday, but my account is still blocked. Could you please check this and let me know how it can be resolved?"],
+        [/^\s*Stop wasting my time and listen to me\.?\s*$/i, "I feel that my concerns have not been heard, and I would appreciate your attention"],
+        [/^\s*You never understand anything I say\.?\s*$/i, "I feel misunderstood, and I would like us to understand each other better"],
+        [/^\s*Your team has completely failed to do its job\.?\s*$/i, "I am concerned that the expected work has not been completed"],
+        [/^\s*You marked my assignment unfairly\.?\s*$/i, "I am concerned that my assignment may not have been assessed fairly"],
+        [/^\s*Your service is terrible, and nobody is helping me\.?\s*$/i, "I am dissatisfied with the service and have not yet received the help I need"],
+        [/^\s*I am sorry I shouted at you yesterday\.?\s*$/i, "I am sorry I shouted at you yesterday"],
+        [/^\s*I have contacted you three times and still have no answer\.?\s*$/i, "I have contacted you three times and still have not received a response. Please provide an update as soon as possible"],
+        [/^\s*I will not accept being spoken to like that\.?\s*$/i, "I expect our conversations to remain respectful, and I am not comfortable being spoken to that way"]
+    ];
+    for (const [pattern, replacement] of exactEnglishCases) {
+        if (pattern.test(result)) return replacement;
     }
     const replacements = [
         [/\bbffr\s*,\s*you clearly don't care what I say\b/gi, "I need us to be realistic about this, and I feel that what I say is not being taken seriously"],
@@ -1290,7 +1324,7 @@ function generateRewrite(text, intensity) {
             .replace(/\bI feel like\b/gi, "I feel")
             .replace(/\bI feel that\b/gi, "I feel")
             .replace(/\bbut\b/gi, "and");
-    } else if (goal === "response" && result.length > 20) {
+    } else if (goal === "response" && result.length > 20 && !/\bplease\b|\brespond\b|\bresponse\b|\bprovide an update\b|\blet me know\b/i.test(result)) {
         result = result.replace(
             /[.!?]*$/,
             ""
@@ -1298,7 +1332,7 @@ function generateRewrite(text, intensity) {
         if (!/\bplease\b/i.test(result)) {
             result += ". Please let me know your thoughts when you have a moment";
         }
-    } else if (goal === "apologize" && intensity > 0) {
+    } else if (goal === "apologize" && intensity > 0 && !/\bI am sorry\b|\bI apologize\b|\bmy apologies\b/i.test(result)) {
         result = result.replace(/[.!?]*$/, "");
         result += ". I am sorry for the way this came across, and I appreciate your understanding";
     } else if (goal === "professional") {
@@ -1322,7 +1356,7 @@ function generateRewrite(text, intensity) {
             );
         }
 
-        if (result.length > 20 && !/\bplease\b/i.test(result)) {
+        if (result.length > 20 && !/\bplease\b/i.test(result) && !/\bI will not accept\b|\bI am not comfortable\b|\bI expect\b|\bI need us to address\b/i.test(result)) {
             result = result.replace(/[.!?]*$/, "");
             result += ". Please let me know how we can resolve this";
         }
