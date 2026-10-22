@@ -1,10 +1,11 @@
-const CACHE_NAME = "deescalation-assistant-v3";
+const CACHE_NAME = "deescalation-assistant-v4";
 const APP_FILES = [
   "./",
   "./index.html",
   "./style.css",
   "./app.js",
-  "./manifest.webmanifest"
+  "./manifest.webmanifest",
+  "./favicon.svg"
 ];
 
 self.addEventListener("install", event => {
