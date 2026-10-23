@@ -5,3 +5,21 @@
 *.tmp
 .DS_Store
 Thumbs.db
+
+# Python backend
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Local secrets and runtime files
+*.log
+*.sqlite
+*.db
+
+# Local AI models
+models/
+*.gguf
