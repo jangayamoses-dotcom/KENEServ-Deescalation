@@ -422,10 +422,10 @@ const languageText = {
         copy: "Copy polished message",
         save: "Save to history",
         share: "Share polished message",
-        email: "ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â§ Email",
-        whatsapp: "ÃƒÂ°Ã…Â¸Ã¢â‚¬â„¢Ã‚Â¬ WhatsApp",
-        telegram: "ÃƒÂ¢Ã…â€œÃ‹â€ ÃƒÂ¯Ã‚Â¸Ã‚Â Telegram",
-        instagram: "ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â¸ Instagram",
+        email: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ Email",
+        whatsapp: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ WhatsApp",
+        telegram: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã¢â‚¬Â¹ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Telegram",
+        instagram: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ Instagram",
         reset: "Clear / Reset",
         messageQuality: "Message quality",
         communicationTips: "Communication tips",
@@ -438,10 +438,10 @@ const languageText = {
   privacyLocal: "Local only",
   privacyLocalAnalysis: "Local analysis",
   privacyLocalAnalysisText: "Your message is analyzed directly in this browser.",
-  privacyNoCloud: "No cloud processing",
-  privacyNoCloudText: "Your messages are not sent to a cloud AI service.",
-  privacyNoApi: "No API key",
-  privacyNoApiText: "The assistant does not require an AI API key to analyze messages.",
+  privacyNoCloud: "Optional hosted AI",
+  privacyNoCloudText: "Live analysis stays in this browser. If you choose an AI feature and consent, the selected content is sent to the local backend and hosted AI service.",
+  privacyNoApi: "Optional AI connection",
+  privacyNoApiText: "Local analysis does not need an AI key. Optional AI features require a local connection token; the provider key stays on the backend.",
   privacyHistory: "Browser history",
   privacyHistoryText: "Saved messages stay in this browser until you clear them.",
   privacyYourData: "Your data",
@@ -506,10 +506,10 @@ const languageText = {
         copy: "Nakili ujumbe ulioboreshwa",
         save: "Hifadhi kwenye historia",
         share: "Shiriki ujumbe ulioboreshwa",
-        email: "ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â§ Barua pepe",
-        whatsapp: "ÃƒÂ°Ã…Â¸Ã¢â‚¬â„¢Ã‚Â¬ WhatsApp",
-        telegram: "ÃƒÂ¢Ã…â€œÃ‹â€ ÃƒÂ¯Ã‚Â¸Ã‚Â Telegram",
-        instagram: "ÃƒÂ°Ã…Â¸Ã¢â‚¬Å“Ã‚Â¸ Instagram",
+        email: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ Barua pepe",
+        whatsapp: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ WhatsApp",
+        telegram: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã¢â‚¬Â¹ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Telegram",
+        instagram: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ Instagram",
         reset: "Futa / Anza upya",
         messageQuality: "Ubora wa ujumbe",
         communicationTips: "Vidokezo vya mawasiliano",
@@ -522,10 +522,10 @@ const languageText = {
   privacyLocal: "Kwenye kifaa pekee",
   privacyLocalAnalysis: "Uchanganuzi wa kwenye kifaa",
   privacyLocalAnalysisText: "Ujumbe wako huchanganuliwa moja kwa moja kwenye kivinjari hiki.",
-  privacyNoCloud: "Hakuna uchakataji wa mtandaoni",
-  privacyNoCloudText: "Ujumbe wako hautumwi kwa huduma ya AI ya mtandaoni.",
-  privacyNoApi: "Hakuna API key",
-  privacyNoApiText: "Msaidizi hauhitaji AI API key kuchanganua ujumbe.",
+  privacyNoCloud: "AI ya mtandaoni kwa hiari",
+  privacyNoCloudText: "Uchanganuzi wa moja kwa moja hubaki kwenye kivinjari hiki. Ukichagua kipengele cha AI na kukubali, maudhui yaliyochaguliwa hutumwa kwa seva ya ndani na huduma ya AI ya mtandaoni.",
+  privacyNoApi: "Muunganisho wa AI wa hiari",
+  privacyNoApiText: "Uchanganuzi wa ndani hauhitaji AI key. Vipengele vya AI vya hiari vinahitaji tokeni ya muunganisho wa ndani; key ya mtoa huduma hubaki kwenye seva.",
   privacyHistory: "Historia ya kivinjari",
   privacyHistoryText: "Ujumbe uliohifadhiwa hubaki kwenye kivinjari hiki hadi uufute.",
   privacyYourData: "Data yako",
@@ -1023,6 +1023,38 @@ function applySmartPreset(result, preset) {
     return result + ". " + addition;
 }
 
+function generateShengRewrite(text) {
+    let result = text.trim().replace(/\s+/g, " ");
+
+    if (!result) return result;
+
+    const exactShengCases = [
+        [
+            /^Wewe huniskizangi bana\.\s*Nimekuambia hii kitu mara mob,\s*na bado unarudia tu\.?$/i,
+            "Bana, huniskizangi. Nimekuambia hii kitu mara mob, lakini bado unaendelea kurudia. Tafadhali jaribu kunisikiza na usirudie tena."
+        ],
+        [
+            /^Bro,\s*usinidisrespect halafu ujifanye hakuna kitu\.?$/i,
+            "Bro, sikufurahishwa na vile ulini-disrespect. Tuongee kuhusu hii kitu kwa heshima, tafadhali."
+        ]
+    ];
+
+    for (const [pattern, replacement] of exactShengCases) {
+        if (pattern.test(result)) return replacement;
+    }
+
+    // Preserve Sheng vocabulary; normalise punctuation only.
+    result = result.replace(/!+/g, ".");
+    result = result.replace(/\?{2,}/g, "?");
+    result = result.replace(/\s+([,.!?])/g, "$1");
+    result = result.replace(/([.!?])\s*/g, "$1 ").trim();
+
+    if (result && !/[.!?]$/.test(result)) {
+        result += ".";
+    }
+
+    return result;
+}
 function generateRewrite(text, intensity) {
 
     const courtesy = Number(courtesySlider.value);
@@ -1031,6 +1063,11 @@ function generateRewrite(text, intensity) {
 
     if (!result) {
         return currentLanguage === "sw" ? "Ujumbe wako ulioboreshwa utaonekana hapa." : "Your polished message will appear here.";
+    }
+
+    const shengMarkers = /\bhuniskizangi\b|\bmara mob\b|\businidisrespect\b|\bstory same\b|\bkila time\b/i;
+    if (shengMarkers.test(result)) {
+        return generateShengRewrite(result);
     }
 
     if (currentLanguage === "sw") {
@@ -1596,7 +1633,10 @@ function updateScoreExplanation(text, intensity) {
 
 
 
-resetButton.addEventListener("click", () => { messageInput.value = ""; incidentPreset.selectedIndex = 0; toneGoal.selectedIndex = 0; rewriteMode.selectedIndex = 0; courtesySlider.value = 60; updateMessageCount(messageInput.value);
+resetButton.addEventListener("click", () => {
+const rewriteReadyCard = document.getElementById("ai-rewrite-ready");
+if (rewriteReadyCard) rewriteReadyCard.hidden = true;
+messageInput.value = ""; incidentPreset.selectedIndex = 0; toneGoal.selectedIndex = 0; rewriteMode.selectedIndex = 0; courtesySlider.value = 60; updateMessageCount(messageInput.value);
 
 courtesyValue.textContent = "60%"; analyzeMessage(""); });
 
@@ -1625,13 +1665,15 @@ function updateThemeToggle() {
     const icon = document.getElementById("theme-toggle-icon");
     const label = document.getElementById("theme-toggle-label");
     if (icon) icon.innerHTML = dark ? '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>' : '<svg viewBox="0 0 24 24"><path d="M20.5 15.5A8.5 8.5 0 0 1 8.5 3.5 8.5 8.5 0 1 0 20.5 15.5Z"/></svg>';
-    if (label) label.textContent = dark ? "Light mode" : "Dark mode";
+    const swahiliTheme = document.documentElement.lang.toLowerCase().startsWith("sw") || currentLanguage === "sw" || document.body.classList.contains("swahili-mode");
+    if (label) label.textContent = dark ? (swahiliTheme ? "Hali ya mwanga" : "Light mode") : (swahiliTheme ? "Hali ya giza" : "Dark mode");
 }
 themeToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
     updateThemeToggle();
 });
 updateThemeToggle();
+document.addEventListener('caption-interface-language-change', updateThemeToggle);
 
 
 
@@ -2292,6 +2334,8 @@ if ("serviceWorker" in navigator) {
         fields.resultWords.textContent = "0 " + messages[interfaceLanguage()].words;
         fields.resultStyle.textContent = "";
         fields.resultSection.hidden = true;
+        const aiCaptionReadyCard = document.getElementById("ai-caption-ready");
+        if (aiCaptionReadyCard) aiCaptionReadyCard.hidden = true;
         setStatus(messages[interfaceLanguage()].cleared, "success");
         updateDescriptionCount();
     }
@@ -2317,6 +2361,429 @@ if ("serviceWorker" in navigator) {
         }
     });
 
+    document.addEventListener("ai-caption-ready", event => {
+        const caption = typeof event.detail?.caption === "string"
+            ? event.detail.caption.trim()
+            : "";
+
+        if (!caption) return;
+
+        lastCaption = caption;
+        fields.resultText.textContent = lastCaption;
+        fields.resultCount.textContent =
+            lastCaption.length + " " + messages[interfaceLanguage()].label;
+        fields.resultWords.textContent =
+            countWords(lastCaption) + " " + messages[interfaceLanguage()].words;
+        fields.resultStyle.textContent =
+            interfaceLanguage() === "sw" ? "Imetengenezwa kwa AI" : "AI-assisted";
+        fields.resultSection.hidden = false;
+
+        const aiCaptionReadyCard = document.getElementById("ai-caption-ready");
+        if (aiCaptionReadyCard) {
+            aiCaptionReadyCard.hidden = false;
+        }
+
+        setStatus("", "success");
+    });
+
     updateDescriptionCount();
 applyCaptionInterfaceLanguage();
+})();
+
+
+// KENESERV_LOCAL_AI_INTEGRATION_V1
+(() => {
+    "use strict";
+
+    const API_BASE = "http://127.0.0.1:8765";
+    const rewriteButton = document.getElementById("ai-rewrite-button");
+    const captionButton = document.getElementById("ai-caption-button");
+    const aiStatus = document.getElementById("ai-status");
+    const captionStatus = document.getElementById("caption-status");
+    const messageInput = document.getElementById("message");
+    const rewriteMode = document.getElementById("rewrite-mode");
+    const rewriteBox = document.getElementById("rewrite");
+
+    const captionFields = {
+        description: document.getElementById("caption-description"),
+        facts: document.getElementById("caption-facts"),
+        platform: document.getElementById("caption-platform"),
+        purpose: document.getElementById("caption-purpose"),
+        style: document.getElementById("caption-style"),
+        length: document.getElementById("caption-length"),
+        language: document.getElementById("caption-language"),
+        hashtags: document.getElementById("caption-hashtags"),
+        cta: document.getElementById("caption-call-to-action")
+    };
+
+    if (
+        !rewriteButton || !captionButton || !aiStatus ||
+        !captionStatus || !messageInput || !rewriteMode || !rewriteBox ||
+        Object.values(captionFields).some(field => !field)
+    ) {
+        console.error("Optional AI controls are incomplete; AI handlers were not activated.");
+        return;
+    }
+
+    let requestInProgress = false;
+
+    const isSwahili = () =>
+        document.documentElement.lang.toLowerCase().startsWith("sw") ||
+        (typeof currentLanguage !== "undefined" && currentLanguage === "sw");
+
+    const say = (english, swahili) => isSwahili() ? swahili : english;
+
+    function setStatus(element, message, kind = "") {
+        element.dataset.state = kind;
+
+        if (kind === "loading") {
+            element.replaceChildren();
+            element.setAttribute("aria-label", message);
+            const indicator = document.createElement("span");
+            indicator.className = "loading-dots";
+            indicator.setAttribute("aria-hidden", "true");
+
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement("span");
+                dot.className = "loading-dot";
+                indicator.appendChild(dot);
+            }
+
+            element.appendChild(indicator);
+            return;
+        }
+
+        element.removeAttribute("aria-label");
+        element.textContent = message;
+    }
+
+    function confirmDisclosure(feature) {
+        const english =
+            "You are choosing " + feature + ". The selected text and settings will be sent to your local backend at 127.0.0.1:8765 and then to a hosted AI service for processing. Do not send passwords, private keys, or information you do not want processed there. Continue?";
+        const swahili =
+            "Umechagua " + feature + ". Maandishi na mipangilio uliyochagua itatumwa kwa seva ya ndani kwenye 127.0.0.1:8765, kisha kwa huduma ya AI ya mtandaoni ili kuchakatwa. Usitume nenosiri, funguo za siri au taarifa ambazo hutaki zichakatwe huko. Uendelee?";
+        return window.confirm(isSwahili() ? swahili : english);
+    }
+
+    async function postJson(route, payload) {
+        const controller = new AbortController();
+        const timer = window.setTimeout(() => controller.abort(), 16000);
+
+        try {
+            const response = await fetch(API_BASE + route, {
+                method: "POST",
+                credentials: "omit",
+                cache: "no-store",
+                headers: {
+                    "Content-Type": "application/json",
+                    },
+                body: JSON.stringify(payload),
+                signal: controller.signal
+            });
+
+            if (!response.ok) {
+                const error = new Error("AI request failed.");
+                error.status = response.status;
+                throw error;
+            }
+
+            return await response.json();
+        } finally {
+            window.clearTimeout(timer);
+        }
+    }
+
+    function errorMessage(error) {
+        if (error && error.name === "AbortError") {
+            return say(
+                "The AI request timed out. Try again later.",
+                "Ombi la AI limechukua muda mrefu kupita kiasi. Jaribu tena baadaye."
+            );
+        }
+
+        const status = error && error.status;
+
+        if (status === 401 || status === 403) {
+            return say(
+                "The local backend rejected the request. Check that the app is open through its local launcher.",
+                "Seva ya ndani imekataa ombi. Hakikisha programu imefunguliwa kupitia kifungua programu chake cha ndani."
+            );
+        }
+        if (status === 413) {
+            return say(
+                "The submitted content is too large.",
+                "Maudhui yaliyotumwa ni makubwa mno."
+            );
+        }
+        if (status === 422) {
+            return say(
+                "Some fields are invalid. Check the form and try again.",
+                "Baadhi ya sehemu hazina taarifa zinazokubalika. Kagua fomu ujaribu tena."
+            );
+        }
+        if (status === 429) {
+            return say(
+                "Too many requests. Wait a little before trying again.",
+                "Maombi ni mengi mno. Subiri kidogo kabla ya kujaribu tena."
+            );
+        }
+        if (status === 503) {
+            return say(
+                "The AI service is currently unavailable or not configured.",
+                "Huduma ya AI haipatikani kwa sasa au haijasanidiwa."
+            );
+        }
+
+        if (!status) {
+            return say(
+                "Cannot reach the local AI service. Check that the backend is running at 127.0.0.1:8765.",
+                "Haiwezekani kufikia huduma ya AI ya ndani. Hakikisha seva inaendeshwa kwenye 127.0.0.1:8765."
+            );
+        }
+
+        return say(
+            "The AI request could not be completed. Please try again later.",
+            "Ombi la AI halikuweza kukamilishwa. Tafadhali jaribu tena baadaye."
+        );
+    }
+
+    const rewriteReadyCard = document.getElementById("ai-rewrite-ready");
+    const rewriteReadyTitle = document.getElementById("ai-rewrite-ready-title");
+    const rewriteReadyText = document.getElementById("ai-rewrite-ready-text");
+    const captionReadyCard = document.getElementById("ai-caption-ready");
+    const captionReadyTitle = document.getElementById("ai-caption-ready-title");
+    const captionReadyText = document.getElementById("ai-caption-ready-text");
+
+    function updateReadyCardLanguage() {
+        const swahili = isSwahili();
+
+        if (rewriteReadyTitle) {
+            rewriteReadyTitle.textContent = swahili
+                ? "Ujumbe Ulioboreshwa Uko Tayari"
+                : "AI Rewrite Ready";
+        }
+        if (rewriteReadyText) {
+            rewriteReadyText.textContent = swahili
+                ? "Ujumbe wako umeboreshwa. Ukague kabla ya kunakili au kushiriki."
+                : "Your message has been refined. Review it before copying or sharing.";
+        }
+        if (captionReadyTitle) {
+            captionReadyTitle.textContent = swahili
+                ? "Maelezo ya AI Yako Tayari"
+                : "AI Caption Ready";
+        }
+        if (captionReadyText) {
+            captionReadyText.textContent = swahili
+                ? "Maelezo yako yako tayari. Kagua majina, tarehe na ukweli kabla ya kuchapisha."
+                : "Your caption is ready. Review names, dates and facts before publishing.";
+        }
+    }
+
+    document.addEventListener("caption-interface-language-change", updateReadyCardLanguage);
+    updateReadyCardLanguage();
+
+    async function runRequest(button, statusElement, feature, route, payload, onSuccess) {
+        if (requestInProgress) {
+            setStatus(
+                statusElement,
+                say("An AI request is already in progress.", "Ombi la AI linaendelea tayari."),
+                "info"
+            );
+            return;
+        }
+
+        if (!confirmDisclosure(feature)) {
+            setStatus(
+                statusElement,
+                say("Cancelled. Nothing was sent.", "Imeghairiwa. Hakuna kilichotumwa."),
+                "info"
+            );
+            return;
+        }
+
+        if (route === "/rewrite" && rewriteReadyCard) {
+            rewriteReadyCard.hidden = true;
+        }
+        if (route === "/caption" && captionReadyCard) {
+            captionReadyCard.hidden = true;
+        }
+
+        requestInProgress = true;
+        const previousLabel = button.textContent;
+        button.disabled = true;
+        button.setAttribute("aria-busy", "true");
+
+        setStatus(
+            statusElement,
+            say("Connecting to the AI serviceÃ¢â‚¬Â¦", "Inaunganisha na huduma ya AIÃ¢â‚¬Â¦"),
+            "loading"
+        );
+
+        try {
+            const result = await postJson(route, payload);
+            onSuccess(result);
+        } catch (error) {
+            setStatus(statusElement, errorMessage(error), "error");
+        } finally {
+            requestInProgress = false;
+            button.disabled = false;
+            button.removeAttribute("aria-busy");
+            button.textContent = previousLabel;
+        }
+    }
+
+    rewriteButton.addEventListener("click", () => {
+        const original = messageInput.value.trim();
+
+        if (!original) {
+            setStatus(
+                aiStatus,
+                say("Enter a message to rewrite first.", "Andika ujumbe unaotaka kuboresha kwanza."),
+                "error"
+            );
+            messageInput.focus();
+            return;
+        }
+
+        if (original.length > 4000) {
+            setStatus(
+                aiStatus,
+                say("Your message exceeds the 4,000-character limit.", "Ujumbe wako umezidi kikomo cha herufi 4,000."),
+                "error"
+            );
+            return;
+        }
+
+        const tone = rewriteMode.value;
+        if (!["balanced", "formal", "casual"].includes(tone)) {
+            setStatus(
+                aiStatus,
+                say("Choose a valid rewrite style.", "Chagua mtindo sahihi wa kuboresha ujumbe."),
+                "error"
+            );
+            return;
+        }
+
+        runRequest(
+            rewriteButton,
+            aiStatus,
+            "AI Rewrite",
+            "/rewrite",
+            { message: original, tone },
+            result => {
+                if (!result || typeof result.rewrite !== "string" || !result.rewrite.trim()) {
+                    setStatus(
+                        aiStatus,
+                        say("The AI returned no usable rewrite.", "AI haikurudisha ujumbe ulioboreshwa unaoweza kutumika."),
+                        "error"
+                    );
+                    return;
+                }
+
+                rewriteBox.textContent = result.rewrite.trim();
+                updateBeforeAfter(original, result.rewrite.trim());
+                updateReadyCardLanguage();
+                rewriteReadyCard.hidden = false;
+                setStatus(aiStatus, "", "");
+            }
+        );
+    });
+
+    const platformMap = {
+        facebook: "Facebook",
+        instagram: "Instagram",
+        linkedin: "LinkedIn",
+        x: "X",
+        news: "Other",
+        other: "Other"
+    };
+    const purposeMap = {
+        event: "celebrate",
+        announcement: "announce",
+        awareness: "inform",
+        education: "educate",
+        promotion: "promote",
+        personal: "other",
+        general: "inform"
+    };
+    const styleMap = {
+        journalistic: "professional",
+        professional: "professional",
+        informative: "balanced",
+        creative: "inspiring",
+        casual: "casual"
+    };
+    const lengthMap = {
+        short: "short",
+        standard: "medium",
+        detailed: "long"
+    };
+
+    captionButton.addEventListener("click", () => {
+        const description = captionFields.description.value.trim();
+        const facts = captionFields.facts.value.trim();
+        const cta = captionFields.cta.value.trim();
+
+        if (!description) {
+            setStatus(
+                captionStatus,
+                say("Describe the content before generating a caption.", "Eleza maudhui kwanza kabla ya kutengeneza maelezo."),
+                "error"
+            );
+            captionFields.description.focus();
+            return;
+        }
+
+        if (
+            description.length > 3000 ||
+            facts.length > 2000 ||
+            cta.length > 180
+        ) {
+            setStatus(
+                captionStatus,
+                say("One or more fields exceed their character limit.", "Sehemu moja au zaidi zimezidi kikomo cha herufi."),
+                "error"
+            );
+            return;
+        }
+
+        const payload = {
+            description,
+            verified_facts: facts,
+            platform: platformMap[captionFields.platform.value] || "Other",
+            purpose: purposeMap[captionFields.purpose.value] || "inform",
+            style: styleMap[captionFields.style.value] || "balanced",
+            length: lengthMap[captionFields.length.value] || "medium",
+            language: captionFields.language.value === "sw" ? "Kiswahili" : "English",
+            hashtags: captionFields.hashtags.value === "few",
+            call_to_action: cta
+        };
+
+        runRequest(
+            captionButton,
+            captionStatus,
+            "AI Caption",
+            "/caption",
+            payload,
+            result => {
+                if (!result || typeof result.caption !== "string" || !result.caption.trim()) {
+                    setStatus(
+                        captionStatus,
+                        say("The AI returned no usable caption.", "AI haikurudisha maelezo yanayoweza kutumika."),
+                        "error"
+                    );
+                    return;
+                }
+
+                document.dispatchEvent(new CustomEvent("ai-caption-ready", {
+                    detail: { caption: result.caption.trim() }
+                }));
+            }
+        );
+    });
+
+    document.addEventListener("caption-interface-language-change", () => {
+        rewriteButton.textContent = say("AI Rewrite", "Boresha kwa AI");
+        captionButton.textContent = say("AI Caption", "Maelezo kwa AI");
+    });
 })();

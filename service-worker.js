@@ -1,4 +1,4 @@
-const CACHE_NAME = "deescalation-assistant-v4";
+const CACHE_NAME = "deescalation-assistant-v5";
 const APP_FILES = [
   "./",
   "./index.html",

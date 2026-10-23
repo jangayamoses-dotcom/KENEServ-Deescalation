@@ -255,6 +255,11 @@ body.dark-mode .why-card h3 {
                 </div>
             </div>
                         <h2>Calm rewrite</h2>
+            <div id="ai-rewrite-ready" class="ai-ready-card" role="status" aria-live="polite" hidden>
+                <span class="ai-ready-icon" aria-hidden="true">?</span>
+                <div><h3 id="ai-rewrite-ready-title">AI Rewrite Ready</h3>
+                <p id="ai-rewrite-ready-text">Your message has been refined. Review it before copying or sharing.</p></div>
+            </div>
             <div id="rewrite" class="rewrite-box">
                 Your polished message will appear here.
             </div>
@@ -295,10 +300,13 @@ body.dark-mode .why-card h3 {
         <button id="copy-button">Copy polished message</button>
 <button id="save-history-button" type="button">Save to history</button>
 <button id="share-button" type="button">Share polished message</button>
-
-
-
-            <button id="reset-button" type="button">Clear / Reset</button>
+<div id="ai-controls" class="ai-controls">
+    <div class="main-action-row">
+        <button id="ai-rewrite-button" type="button">AI Rewrite</button>
+        <button id="reset-button" type="button">Clear / Reset</button>
+    </div>
+    <div id="ai-status" class="ai-status" role="status" aria-live="polite"></div>
+</div>
         </section>
                 <section id="caption-generator" class="caption-generator" aria-labelledby="caption-generator-title">
             <div class="caption-header">
@@ -393,13 +401,19 @@ body.dark-mode .why-card h3 {
             </div>
 
             <div class="caption-actions">
-                <button id="generate-caption-button" type="button">Generate Caption</button>
+                <button id="generate-caption-button" type="button">Generate Caption (Local)</button>
+<button id="ai-caption-button" type="button">AI Caption</button>
                 <button id="clear-caption-button" type="button">Clear Inputs</button>
             </div>
 
             <div id="caption-status" class="caption-status" role="status" aria-live="polite"></div>
 
             <section id="caption-result-section" class="caption-result" aria-labelledby="caption-result-title" hidden>
+                <div id="ai-caption-ready" class="ai-ready-card" role="status" aria-live="polite" hidden>
+                    <span class="ai-ready-icon" aria-hidden="true">?</span>
+                    <div><h3 id="ai-caption-ready-title">AI Caption Ready</h3>
+                    <p id="ai-caption-ready-text">Your caption is ready. Review names, dates and facts before publishing.</p></div>
+                </div>
                 <div class="caption-result-header">
                     <h3 id="caption-result-title">Your Caption</h3>
                     <span id="caption-result-style"></span>
