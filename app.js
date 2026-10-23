@@ -2395,7 +2395,7 @@ applyCaptionInterfaceLanguage();
 (() => {
     "use strict";
 
-    const API_BASE = "http://127.0.0.1:8765";
+    const API_BASE = "https://keneserv-deescalation.onrender.com";
     const rewriteButton = document.getElementById("ai-rewrite-button");
     const captionButton = document.getElementById("ai-caption-button");
     const aiStatus = document.getElementById("ai-status");
