@@ -39,98 +39,167 @@ const politeWords = ["please", "thank you", "thanks", "appreciate", "kindly", "s
 
 
 const aggressiveWords = [
+    // English: direct insults, profanity and degrading labels.
     "idiot", "stupid", "useless", "shut up", "hate",
     "damn", "hell", "ridiculous", "pathetic", "lazy",
     "liar", "liars", "fool", "clown", "moron",
     "dumbass", "asshole", "bitch", "bastard", "loser",
     "trash", "worthless", "disgusting", "annoying",
-    "embarrassing", "delusional"
+    "embarrassing", "delusional", "dickhead", "jackass",
+    "jerk", "scumbag", "prick", "fuck", "fucking",
+    "fucked up", "bullshit", "bull shit", "piece of shit",
+    "shithead", "piss off", "screw you", "screw off",
+    "damn fool", "stupid fool", "pathetic loser",
+
+    // Kiswahili: direct insults and degrading expressions.
+    "mjinga", "wapumbavu", "mpumbavu", "fala", "mafalaa",
+    "mshenzi", "washenzi", "malaya", "kahaba", "takataka",
+    "mzembe", "matapeli", "tapeli", "mwongo", "waongo",
+    "kichaa", "wazimu", "huna akili", "huna adabu",
+    "huna maana", "huna kazi", "una upuzi", "upuzi wako",
+    "pumbavu", "shenzi", "jinga", "nyang'au",
+    "umechanganyikiwa", "una matatizo",
+
+    // Common English?Kiswahili/Sheng combinations.
+    "wewe ni mjinga", "wewe ni fala", "wewe ni mshenzi",
+    "wewe ni malaya", "wewe ni takataka",
+    "fala kabisa", "mjinga kabisa", "shenzi kabisa",
+    "unaongea upuzi", "unapiga upuzi", "acha upuzi",
+    "wewe ni bure", "huna akili kabisa"
+];
+
+const animalInsultPhrases = [
+    // Contextual animal-based name-calling; do not flag animal names alone.
+    "you are a dog", "you're a dog", "you dog",
+    "you are a pig", "you're a pig", "you pig",
+    "you are a snake", "you're a snake",
+    "you are a rat", "you're a rat",
+    "you are a monkey", "you're a monkey",
+    "you are an animal", "you're an animal",
+    "son of a bitch", "dirty pig", "stupid cow",
+    "wewe ni mbwa", "mbwa wewe", "wewe mbwa",
+    "wewe ni punda", "punda wewe",
+    "wewe ni nyoka", "nyoka wewe",
+    "wewe ni nguruwe", "nguruwe wewe",
+    "wewe ni tumbili", "tumbili wewe",
+    "wewe ni mnyama", "mnyama wewe",
+    "wewe ni fisi", "fisi wewe",
+    "wewe ni paka", "paka wewe"
 ];
 
 const confrontationalPhrases = [
-    "stop ignoring me",
-    "completely unfair",
-    "fix this right now",
-    "you never listen",
-    "you always",
-    "nobody is actually listening",
-    "turned into an argument",
-    "stop dismissing my concerns",
-    "dismissing my concerns",
-    "you're doing too much",
-    "you are doing too much",
-    "be so fr",
-    "bffr",
-    "stop yapping",
-    "touch grass",
-    "get a grip",
-    "what is wrong with you",
-    "you've got to be kidding me",
-    "you have got to be kidding me",
-    "you're embarrassing",
-    "you are embarrassing",
-    "you're so fake",
-    "you are so fake",
-    "L take",
-    "skill issue",
-    "you must be joking"
+    "stop ignoring me", "completely unfair", "fix this right now",
+    "you never listen", "you always",
+    "nobody is actually listening", "turned into an argument",
+    "stop dismissing my concerns", "dismissing my concerns",
+    "you're doing too much", "you are doing too much",
+    "be so fr", "bffr", "stop yapping", "touch grass",
+    "get a grip", "what is wrong with you",
+    "you've got to be kidding me", "you have got to be kidding me",
+    "you're embarrassing", "you are embarrassing",
+    "you're so fake", "you are so fake", "L take",
+    "skill issue", "you must be joking",
+
+    // Kiswahili and common code-switching.
+    "acha ujinga", "acha upuzi", "acha mchezo",
+    "usinisumbue", "unaboa", "umeniboa",
+    "unaongea nini", "una shida gani", "una matatizo gani",
+    "wewe ni nani", "unajifanya nani", "usiniambie",
+    "acha kunizungusha", "unanichosha", "umenichosha",
+    "wewe kila siku", "huelewi kabisa", "husikii",
+    "hunisikizi", "acha hizo", "wacha hizo",
+    "mbona uko hivyo", "kwani una shida",
+    "unataka nini sasa", "si uache hizo",
+    "umekuwa too much", "unaongea nonsense"
 ];
 
 const blamePhrases = [
-    "you made me", "this is your fault", "because of you", "you caused this",
-    "take responsibility", "giving me excuses",
-    "you always mess things up",
-    "you ruined everything",
-    "you are the problem",
-    "it's all your fault",
-    "this is on you",
-    "you brought this on yourself",
-    "skill issue",
-    "you never get anything right"
+    "you made me", "this is your fault", "because of you",
+    "you caused this", "take responsibility", "giving me excuses",
+    "you always mess things up", "you ruined everything",
+    "you are the problem", "it's all your fault", "this is on you",
+    "you brought this on yourself", "skill issue",
+    "you never get anything right",
+
+    // Kiswahili and common code-switching.
+    "ni kosa lako", "hii ni makosa yako", "kwa sababu yako",
+    "umefanya nikakasirika", "umenifanya nifanye hivi",
+    "wewe ndio shida", "kila kitu ni kosa lako",
+    "umeharibu kila kitu", "unaharibu kila kitu",
+    "hukuwahi kufanya vizuri", "hufanyi kitu vizuri",
+    "acha kujitetea", "unatoa visingizio",
+    "ni wewe ulisababisha", "wewe ndio umesababisha",
+    "unalaumiwa", "kubali makosa yako"
 ];
 
 const dismissivePhrases = [
-    "whatever",
-    "who cares",
-    "it doesn't matter",
-    "you don't care",
-    "you clearly don't care",
+    "whatever", "who cares", "it doesn't matter",
+    "you don't care", "you clearly don't care",
     "you clearly don't care what I say",
     "you don't care what I say",
-    "you don't care about my concerns",
-    "you never care",
-    "you don't even care",
-    "gets ignored",
-    "stop yapping",
-    "touch grass",
-    "that's cap",
-    "thats cap",
-    "L take",
-    "get a grip",
-    "I'm done with you",
-    "im done with you",
-    "you're so fake",
-    "you are so fake",
-    "IDC",
-    "I don't give a damn",
-    "I don't give a shit"
+    "you don't care about my concerns", "you never care",
+    "you don't even care", "gets ignored", "stop yapping",
+    "touch grass", "that's cap", "thats cap", "L take",
+    "get a grip", "I'm done with you", "im done with you",
+    "you're so fake", "you are so fake", "IDC",
+    "I don't give a damn", "I don't give a shit",
+    "not my problem", "nobody asked", "I couldn't care less",
+    "shut your mouth", "keep crying", "cry about it",
+
+    // Kiswahili and common code-switching.
+    "sijali", "sijali kabisa", "sio shida yangu",
+    "si shida yangu", "unaniboa tu", "acha kulia",
+    "nani amekuuliza", "hakuna anayejali",
+    "hiyo hainihusu", "hiyo si kazi yangu",
+    "endelea kulia", "ongea na ukuta",
+    "acha kunisumbua", "unanipotezea muda",
+    "sina habari na wewe", "sina haja na wewe",
+    "wewe si muhimu", "maneno yako hayana maana"
 ];
 
 const pressurePhrases = [
-    "do it now",
-    "answer me now",
-    "respond now",
+    "do it now", "answer me now", "respond now",
     "how many times do I have to",
-    "repeat myself over and over again",
-    "handle it later",
+    "repeat myself over and over again", "handle it later",
     "another promise that will not be followed",
-    "reply right now",
-    "text me back right now",
-    "answer me immediately",
-    "you better respond",
-    "respond or else",
-    "I'm not asking again",
-    "im not asking again"
+    "reply right now", "text me back right now",
+    "answer me immediately", "you better respond",
+    "respond or else", "I'm not asking again",
+    "im not asking again", "you have no choice",
+    "you must do it", "do as I say", "don't test me",
+
+    // Kiswahili and common code-switching.
+    "fanya sasa hivi", "nijibu sasa hivi",
+    "nijibu mara moja", "lazima ufanye hivyo",
+    "huna choice", "huna option", "sina mchezo",
+    "usinizungushe", "nakwambia mara ya mwisho",
+    "usipofanya utaona", "fanya vile nimesema",
+    "lazima unijibu", "jibu simu yangu sasa",
+    "nitakutafuta", "nitakushughulikia",
+    "usithubutu", "usiwe unanikataa",
+    "sitaki kusikia excuses", "usinipe visingizio"
+];
+
+const threatPhrases = [
+    // Threats and intimidation. Context still matters.
+    "I'll hurt you", "I will hurt you",
+    "I'll beat you up", "I will beat you up",
+    "I'll kill you", "I will kill you",
+    "you'll regret this", "you will regret this",
+    "you'll see what happens", "you will see what happens",
+    "watch your back", "I'll make you pay",
+    "I will make you pay", "I'll deal with you",
+    "I will deal with you", "you better watch it",
+    "I'm coming for you", "im coming for you",
+    "I'll destroy you", "I will destroy you",
+    "I'll find you", "I will find you",
+    "I know where you live", "you are dead",
+    "nitakuua", "nitakupiga", "nitakuumiza",
+    "nitakumaliza", "utajuta", "utaona",
+    "nitakushughulikia", "nitakufinya",
+    "nitakutafuta", "nitakufanyia kitu",
+    "nitakupata", "usiponiskiza utaona",
+    "nitakufundisha adabu", "nitakumaliza kabisa"
 ];
 
 
@@ -147,6 +216,19 @@ function updateCommunicationTips(text) {
         tips.push(currentLanguage === "sw" ? "Jaribu kubadilisha maneno ya makabiliano kuwa ombi maalum." : "Try replacing confrontational phrases with a specific request.");
     }
 
+    if (aggressiveWords.some(word => containsTerm(lower, word)) ||
+        animalInsultPhrases.some(phrase => containsTerm(lower, phrase))) {
+        tips.push(currentLanguage === "sw"
+            ? "Epuka matusi au kumlinganisha mtu na mnyama; eleza tatizo na unachohitaji kwa heshima."
+            : "Avoid insults or animal-based name-calling; describe the problem and what you need respectfully.");
+    }
+
+    if (threatPhrases.some(phrase => containsTerm(lower, phrase) && !( /\bnitakutafuta\b.{0,40}\b(tuongee|tuzungumze|tukiongee)\b/iu.test(lower) && phrase === "nitakutafuta"))) {
+        tips.push(currentLanguage === "sw"
+            ? "Kauli inayoweza kusikika kama tishio inaweza kuongeza hofu. Eleza mpaka au hatua unayokusudia bila kutishia madhara."
+            : "Wording that sounds like a threat can create fear. State your boundary or intended next step without threatening harm.");
+    }
+
     if (blamePhrases.some(phrase => containsTerm(lower, phrase))) {
         tips.push(currentLanguage === "sw" ? "Zingatia hali na athari zake badala ya kumlaumu mtu." : "Focus on the situation and its impact instead of assigning blame.");
     }
@@ -155,7 +237,7 @@ function updateCommunicationTips(text) {
         tips.push(currentLanguage === "sw" ? "Epuka maneno ya kupuuza na eleza unachohitaji kwa uwazi." : "Avoid dismissive wording and explain what you need clearly.");
     }
 
-    if (pressurePhrases.some(phrase => containsTerm(lower, phrase))) {
+    if (pressurePhrases.some(phrase => containsTerm(lower, phrase) && !( /\bnitakutafuta\b.{0,40}\b(tuongee|tuzungumze|tukiongee)\b/iu.test(lower) && phrase === "nitakutafuta"))) {
         tips.push(currentLanguage === "sw" ? "Mpe mwingine nafasi ya kujibu badala ya kumwekea shinikizo." : "Give the other person room to respond instead of creating pressure.");
     }
 
@@ -422,10 +504,10 @@ const languageText = {
         copy: "Copy polished message",
         save: "Save to history",
         share: "Share polished message",
-        email: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ Email",
-        whatsapp: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ WhatsApp",
-        telegram: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã¢â‚¬Â¹ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Telegram",
-        instagram: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ Instagram",
+        email: "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ Email",
+        whatsapp: "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ WhatsApp",
+        telegram: "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Telegram",
+        instagram: "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ Instagram",
         reset: "Clear / Reset",
         messageQuality: "Message quality",
         communicationTips: "Communication tips",
@@ -506,10 +588,10 @@ const languageText = {
         copy: "Nakili ujumbe ulioboreshwa",
         save: "Hifadhi kwenye historia",
         share: "Shiriki ujumbe ulioboreshwa",
-        email: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ Barua pepe",
-        whatsapp: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ WhatsApp",
-        telegram: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã¢â‚¬Â¹ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Telegram",
-        instagram: "ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â°ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ Instagram",
+        email: "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§ Barua pepe",
+        whatsapp: "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ WhatsApp",
+        telegram: "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¹ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â Telegram",
+        instagram: "ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¸ Instagram",
         reset: "Futa / Anza upya",
         messageQuality: "Ubora wa ujumbe",
         communicationTips: "Vidokezo vya mawasiliano",
@@ -676,6 +758,34 @@ function applyLanguage() {
     saveHistoryButton.textContent = t.save;
     shareButton.textContent = t.share;
     resetButton.textContent = t.reset;
+
+    const quickActionLabels = currentLanguage === "sw"
+        ? {
+            calm: "Tuliza ujumbe huu",
+            professional: "Fanya uwe wa kitaalamu",
+            friendly: "Fanya uwe wa kirafiki",
+            shorten: "Fupisha ujumbe huu",
+            group: "Vitendo vya kuboresha ujumbe"
+        }
+        : {
+            calm: "Calm This Message",
+            professional: "Make Professional",
+            friendly: "Make Friendly",
+            shorten: "Shorten This Message",
+            group: "Quick rewrite actions"
+        };
+
+    const quickActionGroup = document.getElementById("quick-actions");
+    const quickCalmButton = document.getElementById("quick-calm");
+    const quickProfessionalButton = document.getElementById("quick-professional");
+    const quickFriendlyButton = document.getElementById("quick-friendly");
+    const quickShortenButton = document.getElementById("quick-shorten");
+
+    if (quickActionGroup) quickActionGroup.setAttribute("aria-label", quickActionLabels.group);
+    if (quickCalmButton) quickCalmButton.textContent = quickActionLabels.calm;
+    if (quickProfessionalButton) quickProfessionalButton.textContent = quickActionLabels.professional;
+    if (quickFriendlyButton) quickFriendlyButton.textContent = quickActionLabels.friendly;
+    if (quickShortenButton) quickShortenButton.textContent = quickActionLabels.shorten;
     const languageToggleLabel = document.getElementById("language-toggle-label"); if (languageToggleLabel) languageToggleLabel.textContent = t.button;
     if (qualityTitle) qualityTitle.textContent = t.messageQuality;
     if (clarityLabel) clarityLabel.textContent = t.clarity;
@@ -760,14 +870,27 @@ function analyzeMessage(text) {
 
     const blameDetected = blamePhrases.filter(phrase => containsTerm(lower, phrase));
 const dismissiveDetected = dismissivePhrases.filter(phrase => containsTerm(lower, phrase));
-const pressureDetected = pressurePhrases.filter(phrase => containsTerm(lower, phrase));
+    const benignFindToTalkContext =
+        /\bnitakutafuta\b.{0,40}\b(tuongee|tuzungumze|tukiongee)\b/iu.test(lower);
 
-const allLanguageSignals = [
+    const pressureDetected = pressurePhrases.filter(phrase =>
+        containsTerm(lower, phrase) &&
+        !(benignFindToTalkContext && phrase === "nitakutafuta")
+    );
+    const animalDetected = animalInsultPhrases.filter(phrase => containsTerm(lower, phrase));
+    const threatDetected = threatPhrases.filter(phrase =>
+        containsTerm(lower, phrase) &&
+        !(benignFindToTalkContext && phrase === "nitakutafuta")
+    );
+
+    const allLanguageSignals = [
         ...detected.map(word => ({ label: word, type: "aggressive" })),
         ...confrontationalDetected.map(phrase => ({ label: phrase, type: "confrontational" })),
         ...blameDetected.map(phrase => ({ label: phrase, type: "blame" })),
         ...dismissiveDetected.map(phrase => ({ label: phrase, type: "dismissive" })),
-        ...pressureDetected.map(phrase => ({ label: phrase, type: "pressure" }))
+        ...pressureDetected.map(phrase => ({ label: phrase, type: "pressure" })),
+        ...animalDetected.map(phrase => ({ label: phrase, type: "animal-insult" })),
+        ...threatDetected.map(phrase => ({ label: phrase, type: "threat" }))
     ];
 
     const uniqueLanguageSignals = allLanguageSignals.filter((signal, index, signals) =>
@@ -783,7 +906,7 @@ const allLanguageSignals = [
             const longerLabel = other.label.toLowerCase();
 
             return longerLabel.length > shorterLabel.length &&
-                longerLabel.includes(shorterLabel);
+                containsTerm(longerLabel, shorterLabel);
         });
     });
 
@@ -796,22 +919,31 @@ const allLanguageSignals = [
                 )
                 .join(", ");
 
-        let highlighted = escapeHtml(
-            text.replace(/\*\*/g, "")
+        const labels = filteredLanguageSignals
+            .map(signal => signal.label)
+            .sort((a, b) => b.length - a.length);
+
+        const alternatives = labels.map(escapeRegExp).join("|");
+        const pattern = new RegExp(
+            "(^|[^\\p{L}\\p{N}_])(" + alternatives + ")(?=$|[^\\p{L}\\p{N}_])",
+            "giu"
         );
 
-        filteredLanguageSignals.forEach(signal => {
-            const pattern = new RegExp(
-                "(" + escapeRegExp(signal.label) + ")",
-                "gi"
-            );
+        const sourceText = text.replace(/\*\*/g, "");
+        let highlighted = "";
+        let cursor = 0;
 
-            highlighted = highlighted.replace(
-                pattern,
-                "<mark>$1</mark>"
-            );
-        });
+        for (const match of sourceText.matchAll(pattern)) {
+            const prefixLength = match[1].length;
+            const termStart = match.index + prefixLength;
+            const termEnd = termStart + match[2].length;
 
+            highlighted += escapeHtml(sourceText.slice(cursor, termStart));
+            highlighted += "<mark>" + escapeHtml(match[2]) + "</mark>";
+            cursor = termEnd;
+        }
+
+        highlighted += escapeHtml(sourceText.slice(cursor));
         highlightPreview.innerHTML = highlighted;
     } else {
         detectedWords.textContent =
@@ -822,11 +954,11 @@ const allLanguageSignals = [
     }
     let intensity = 0;
 
-    aggressiveWords.forEach(word => {
-        if (containsTerm(lower, word)) {
-            intensity += 12;
-        }
-    });
+    // Score distinct matched terms with category caps so a large vocabulary
+    // does not automatically inflate the score.
+    intensity += Math.min(detected.length * 8, 32);
+    intensity += Math.min(animalDetected.length * 12, 36);
+    intensity += Math.min(threatDetected.length * 22, 44);
 
     intensifiers.forEach(word => {
         const regex = new RegExp("\\b" + word + "\\b", "gi");
@@ -1437,6 +1569,101 @@ function escapeRegExp(text) {
     );
 }
 
+/* QUICK REWRITE ACTION HANDLERS */
+const quickCalmButton = document.getElementById("quick-calm");
+const quickProfessionalButton = document.getElementById("quick-professional");
+const quickFriendlyButton = document.getElementById("quick-friendly");
+const quickShortenButton = document.getElementById("quick-shorten");
+
+if (quickCalmButton) {
+    quickCalmButton.addEventListener("click", () => {
+        rewriteMode.value = "balanced";
+        toneGoal.value = "deescalate";
+        analyzeMessage(messageInput.value);
+    });
+}
+
+if (quickProfessionalButton) {
+    quickProfessionalButton.addEventListener("click", () => {
+        rewriteMode.value = "formal";
+        toneGoal.value = "professional";
+        analyzeMessage(messageInput.value);
+    });
+}
+
+if (quickFriendlyButton) {
+    quickFriendlyButton.addEventListener("click", () => {
+        rewriteMode.value = "casual";
+        toneGoal.value = "deescalate";
+        analyzeMessage(messageInput.value);
+    });
+}
+
+if (quickShortenButton) {
+    quickShortenButton.addEventListener("click", () => {
+        const original = messageInput.value.trim();
+
+        if (!original) {
+            analyzeMessage(messageInput.value);
+            messageInput.focus();
+            return;
+        }
+
+        analyzeMessage(original);
+
+        let shortened = rewriteBox.textContent || "";
+
+        shortened = shortened
+            .replace(/\bI just wanted to say that\b[:,]?\s*/gi, "")
+            .replace(/\bI would like to mention that\b[:,]?\s*/gi, "")
+            .replace(/\bI just wanted to let you know that\b[:,]?\s*/gi, "")
+            .replace(/\bto be honest,?\s*/gi, "")
+            .replace(/\bin my opinion,?\s*/gi, "")
+            .replace(/\bI think that\b/gi, "I think")
+            .replace(/[ \t]{2,}/g, " ")
+            .replace(/\s+([,.;!?])/g, "$1")
+            .trim();
+
+        if (shortened && shortened.length < rewriteBox.textContent.trim().length) {
+            rewriteBox.textContent = shortened;
+            updateBeforeAfter(original, shortened);
+        }
+    });
+}
+/* KEYBOARD SHORTCUT HANDLERS */
+document.addEventListener("keydown", (event) => {
+    if (!event.ctrlKey || event.altKey || event.metaKey) {
+        return;
+    }
+
+    const key = event.key.toLowerCase();
+    const activeElement = document.activeElement;
+    const isCaptionDescription =
+        activeElement && activeElement.id === "caption-description";
+
+    if (event.key === "Enter" && !event.shiftKey && !isCaptionDescription) {
+        event.preventDefault();
+        document.getElementById("ai-rewrite-button")?.click();
+        return;
+    }
+
+    if (!event.shiftKey) {
+        return;
+    }
+
+    if (key === "y") {
+        event.preventDefault();
+        copyButton.click();
+    } else if (key === "f") {
+        event.preventDefault();
+        rewriteMode.value = "formal";
+        analyzeMessage(messageInput.value);
+    } else if (key === "l") {
+        event.preventDefault();
+        rewriteMode.value = "casual";
+        analyzeMessage(messageInput.value);
+    }
+});
 messageInput.addEventListener("input", () => {
     if (!messageInput.value.trim()) {
         toneLabel.textContent = currentLanguage === "sw" ? "Hakuna ujumbe uliochanganuliwa" : "No message analyzed";
@@ -1472,32 +1699,60 @@ courtesyValue.textContent =
 });
 
 copyButton.addEventListener("click", async () => {
-    const text = rewriteBox.textContent;
+    const text = rewriteBox.textContent.trim();
+    const placeholder = currentLanguage === "sw"
+        ? "Ujumbe wako ulioboreshwa utaonekana hapa."
+        : "Your polished message will appear here.";
 
-    if (
-        !text ||
-        text ===
-            currentLanguage === "sw" ? "Ujumbe wako ulioboreshwa utaonekana hapa." : "Your polished message will appear here."
-    ) {
-        return;
-    }
+    if (!text || text === placeholder) return;
+
+    let copied = false;
 
     try {
-        await navigator.clipboard.writeText(text);
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+            copied = true;
+        }
+    } catch (error) {
+        copied = false;
+    }
 
-        copyButton.textContent = "Copied!";
+    if (!copied) {
+        const temporaryTextarea = document.createElement("textarea");
+        temporaryTextarea.value = text;
+        temporaryTextarea.setAttribute("readonly", "");
+        temporaryTextarea.style.position = "fixed";
+        temporaryTextarea.style.left = "-9999px";
+        document.body.appendChild(temporaryTextarea);
+        temporaryTextarea.select();
+
+        try {
+            copied = document.execCommand("copy");
+        } catch (error) {
+            copied = false;
+        } finally {
+            temporaryTextarea.remove();
+        }
+    }
+
+    if (copied) {
+        const originalLabel = currentLanguage === "sw"
+            ? "Nakili ujumbe ulioboreshwa"
+            : "Copy polished message";
+
+        copyButton.textContent = currentLanguage === "sw"
+            ? "Imenakiliwa!"
+            : "Copied!";
 
         setTimeout(() => {
-            copyButton.textContent =
-                "Copy polished message";
+            copyButton.textContent = originalLabel;
         }, 1500);
-    } catch (error) {
-        alert(
-            "Copy failed. Please select and copy the text manually."
-        );
+    } else {
+        alert(currentLanguage === "sw"
+            ? "Kunakili kumeshindwa. Tafadhali chagua maandishi na uyakili mwenyewe."
+            : "Copy failed. Please select and copy the text manually.");
     }
 });
-
 updateMessageCount(messageInput.value);
 
 courtesyValue.textContent =
@@ -1524,6 +1779,69 @@ function updateScoreExplanation(text, intensity) {
         confrontationalPhrases.filter(phrase =>
             containsTerm(lower, phrase)
         );
+    const blameFound = blamePhrases.filter(phrase =>
+        containsTerm(lower, phrase)
+    );
+    const dismissiveFound = dismissivePhrases.filter(phrase =>
+        containsTerm(lower, phrase)
+    );
+    const benignFindToTalkContext = /\bnitakutafuta\b.{0,40}\b(tuongee|tuzungumze|tukiongee)\b/iu.test(lower);
+    const pressureFound = pressurePhrases.filter(phrase =>
+        containsTerm(lower, phrase) &&
+        !(benignFindToTalkContext && phrase === "nitakutafuta")
+    );
+    const animalFound = animalInsultPhrases.filter(phrase =>
+        containsTerm(lower, phrase)
+    );
+    const threatFound = threatPhrases.filter(phrase =>
+        containsTerm(lower, phrase) &&
+        !(benignFindToTalkContext && phrase === "nitakutafuta")
+    );
+
+    if (threatFound.length > 0) {
+        reasons.push({
+            type: "high",
+            text: currentLanguage === "sw"
+                ? `Kauli zinazoweza kusikika kama vitisho: ${threatFound.join(", ")}`
+                : `Potentially threatening wording: ${threatFound.join(", ")}`
+        });
+    }
+
+    if (animalFound.length > 0) {
+        reasons.push({
+            type: "high",
+            text: currentLanguage === "sw"
+                ? `Matusi ya kumlinganisha mtu na mnyama: ${animalFound.join(", ")}`
+                : `Animal-based name-calling: ${animalFound.join(", ")}`
+        });
+    }
+
+    if (blameFound.length > 0) {
+        reasons.push({
+            type: "medium",
+            text: currentLanguage === "sw"
+                ? `Lugha ya kulaumu imegunduliwa: ${blameFound.join(", ")}`
+                : `Blaming language detected: ${blameFound.join(", ")}`
+        });
+    }
+
+    if (dismissiveFound.length > 0) {
+        reasons.push({
+            type: "medium",
+            text: currentLanguage === "sw"
+                ? `Lugha ya kupuuza imegunduliwa: ${dismissiveFound.join(", ")}`
+                : `Dismissive wording detected: ${dismissiveFound.join(", ")}`
+        });
+    }
+
+    if (pressureFound.length > 0) {
+        reasons.push({
+            type: "medium",
+            text: currentLanguage === "sw"
+                ? `Lugha ya kuweka shinikizo imegunduliwa: ${pressureFound.join(", ")}`
+                : `Pressuring language detected: ${pressureFound.join(", ")}`
+        });
+    }
 
     if (confrontationalFound.length > 0) {
         reasons.push({
@@ -2459,9 +2777,9 @@ applyCaptionInterfaceLanguage();
 
     function confirmDisclosure(feature) {
         const english =
-            "You are choosing " + feature + ". The selected text and settings will be sent to your local backend at 127.0.0.1:8765 and then to a hosted AI service for processing. Do not send passwords, private keys, or information you do not want processed there. Continue?";
+            "You are choosing " + feature + ". The selected text and settings will be sent to the hosted backend and AI provider for processing. Do not send passwords, private keys, or information you do not want processed there. Continue?";
         const swahili =
-            "Umechagua " + feature + ". Maandishi na mipangilio uliyochagua itatumwa kwa seva ya ndani kwenye 127.0.0.1:8765, kisha kwa huduma ya AI ya mtandaoni ili kuchakatwa. Usitume nenosiri, funguo za siri au taarifa ambazo hutaki zichakatwe huko. Uendelee?";
+            "Umechagua " + feature + ". Maandishi na mipangilio uliyochagua itatumwa kwa seva ya mtandaoni na huduma ya AI ili kuchakatwa. Usitume nenosiri, funguo za siri au taarifa ambazo hutaki zichakatwe huko. Uendelee?";
         return window.confirm(isSwahili() ? swahili : english);
     }
 
@@ -2536,8 +2854,8 @@ applyCaptionInterfaceLanguage();
 
         if (!status) {
             return say(
-                "Cannot reach the local AI service. Check that the backend is running at 127.0.0.1:8765.",
-                "Haiwezekani kufikia huduma ya AI ya ndani. Hakikisha seva inaendeshwa kwenye 127.0.0.1:8765."
+                "Cannot reach the hosted AI service. Check your internet connection and try again.",
+                "Haiwezekani kufikia huduma ya AI ya mtandaoni. Angalia muunganisho wako wa intaneti kisha ujaribu tena."
             );
         }
 
@@ -2615,7 +2933,7 @@ applyCaptionInterfaceLanguage();
 
         setStatus(
             statusElement,
-            say("Connecting to the AI serviceÃ¢â‚¬Â¦", "Inaunganisha na huduma ya AIÃ¢â‚¬Â¦"),
+            say("Connecting to the AI serviceÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦", "Inaunganisha na huduma ya AIÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦"),
             "loading"
         );
 
