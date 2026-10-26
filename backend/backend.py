@@ -362,7 +362,35 @@ async def analyze_message(
                 **data,
                 "model": MODEL,
             })
-        except (json.JSONDecodeError, TypeError, ValueError):
+        except (json.JSONDecodeError, TypeError, ValueError) as exc:
+            if isinstance(exc, json.JSONDecodeError):
+                print(
+                    f"Analysis result validation failure: type=JSONDecodeError, "
+                    f"line={exc.lineno}, column={exc.colno}",
+                    flush=True,
+                )
+            elif hasattr(exc, "errors") and callable(exc.errors):
+                safe_errors = [
+                    {
+                        "location": ".".join(
+                            str(part) for part in item.get("loc", ())
+                        ),
+                        "type": item.get("type", "unknown"),
+                    }
+                    for item in exc.errors()
+                ]
+                print(
+                    f"Analysis result validation failure: "
+                    f"type={type(exc).__name__}, errors={safe_errors}",
+                    flush=True,
+                )
+            else:
+                print(
+                    f"Analysis result validation failure: "
+                    f"type={type(exc).__name__}",
+                    flush=True,
+                )
+
             raise HTTPException(
                 status_code=502,
                 detail="The analysis service returned an invalid result. Please try again.",
