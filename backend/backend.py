@@ -1,4 +1,5 @@
 import os
+import json
 import re
 from contextlib import asynccontextmanager
 
@@ -41,6 +42,7 @@ class RateLimitMiddleware:
         if scope["type"] != "http" or scope.get("path") not in {
             "/rewrite",
             "/caption",
+            "/analyze",
         }:
             await self.app(scope, receive, send)
             return
@@ -228,6 +230,15 @@ def has_unsupported_apology(original: str, rewritten: str) -> bool:
 class RewriteRequest(BaseModel):
     message: str = Field(min_length=1, max_length=MAX_MESSAGE_LENGTH)
     tone: str = Field(default="balanced", pattern="^(balanced|formal|casual)$")
+    incident_preset: str = Field(
+        default="general",
+        pattern="^(general|personal|school|work|customer|social|conflict)$",
+    )
+    tone_goal: str = Field(
+        default="deescalate",
+        pattern="^(deescalate|response|apologize|professional|relationship|firm)$",
+    )
+    courtesy: int = Field(default=60, ge=0, le=100)
 
     @field_validator("message")
     @classmethod
@@ -241,6 +252,144 @@ class RewriteRequest(BaseModel):
 class RewriteResponse(BaseModel):
     rewrite: str
     model: str
+
+
+class AnalyzeRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=MAX_MESSAGE_LENGTH)
+    interface_language: str = Field(default="en", pattern="^(en|sw)$")
+
+    @field_validator("message")
+    @classmethod
+    def analysis_message_must_not_be_blank(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("Message must not be blank.")
+        return value
+
+
+class AnalysisSignal(BaseModel):
+    text: str = Field(min_length=1, max_length=200)
+    category: str = Field(
+        pattern="^(threat|insult|hostility|blame|pressure|dismissive|profanity|sarcasm|boundary|concern|other)$"
+    )
+    severity: str = Field(pattern="^(low|moderate|high)$")
+    explanation: str = Field(max_length=240)
+
+
+class AnalyzeResponse(BaseModel):
+    language: str = Field(max_length=60)
+    intensity: int = Field(ge=0, le=100)
+    warmth: int = Field(ge=0, le=100)
+    professionalism: int = Field(ge=0, le=100)
+    tone_label: str = Field(min_length=1, max_length=60)
+    summary: str = Field(max_length=300)
+    signals: list[AnalysisSignal] = Field(max_length=8)
+    tips: list[str] = Field(max_length=4)
+    model: str
+
+
+@app.post("/analyze", response_model=AnalyzeResponse)
+async def analyze_message(
+    request: AnalyzeRequest,
+    origin: str | None = Header(default=None),
+    host: str | None = Header(default=None),
+):
+    require_local_origin(origin, host)
+    client = app.state.client
+    if client is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Analysis service is not configured.",
+        )
+
+    output_language = (
+        "Kiswahili" if request.interface_language == "sw" else "English"
+    )
+
+    system_prompt = (
+        "You are a careful communication analyst. Analyse the supplied message "
+        "in context, not by matching isolated words. Understand negation, quotation, "
+        "sarcasm, idioms, Kenyan English, Kiswahili, Sheng, Dholuo, and mixed-language "
+        "messages when possible. Do not assume a message is hostile merely because "
+        "it contains a strong word: consider who is speaking, what is being described, "
+        "whether the wording is quoted, and the surrounding sentence. Do not infer "
+        "intent, identity, relationship, or facts that are not established. "
+        "Distinguish a clear threat from frustration, a boundary, a warning, or an "
+        "ambiguous expression. If uncertain, reflect that uncertainty in the summary "
+        "and use lower confidence in the signals. "
+        "Score intensity from 0 (calm) to 100 (extremely hostile or threatening); "
+        "warmth from 0 (cold or antagonistic) to 100 (warm and considerate); and "
+        "professionalism from 0 (inappropriate or unclear) to 100 (clear and "
+        "professional). Scores should reflect the whole message, not one word. "
+        "Return no more than 8 important signals. Each signal's text MUST be an "
+        "exact substring copied from the message. Do not invent quotations. Use "
+        "categories threat, insult, hostility, blame, pressure, dismissive, profanity, "
+        "sarcasm, boundary, concern, or other. Do not label a reasonable boundary "
+        "or legitimate complaint as aggression by default. Give up to 4 practical, "
+        "non-judgmental communication tips. Do not rewrite the message. "
+        "Write tone_label, summary, signal explanations, and tips in "
+        + output_language
+        + ". The detected language description may name any language or mixture. "
+        "Return ONLY a valid JSON object with exactly these keys: language, intensity, "
+        "warmth, professionalism, tone_label, summary, signals, tips. Each signals "
+        "item must contain text, category, severity (low, moderate, high), and "
+        "explanation. Scores must be integers from 0 to 100. Signals and tips must "
+        "be arrays. Do not include markdown fences or extra commentary."
+    )
+
+    try:
+        completion = await client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": request.message},
+            ],
+            temperature=0.1,
+            max_completion_tokens=1000,
+            response_format={"type": "json_object"},
+        )
+
+        content = completion.choices[0].message.content
+        if not isinstance(content, str) or not content.strip():
+            raise HTTPException(
+                status_code=502,
+                detail="The analysis service returned no usable result.",
+            )
+
+        try:
+            data = json.loads(content)
+            result = AnalyzeResponse.model_validate({
+                **data,
+                "model": MODEL,
+            })
+        except (json.JSONDecodeError, TypeError, ValueError):
+            raise HTTPException(
+                status_code=502,
+                detail="The analysis service returned an invalid result. Please try again.",
+            )
+
+        # Reject any signal quotation that is not actually present in the source.
+        verified_signals = [
+            signal for signal in result.signals
+            if signal.text in request.message
+        ]
+        result.signals = verified_signals
+        return result
+
+    except HTTPException:
+        raise
+    except Exception as exc:
+        # Never log message contents, prompts, API keys, or provider response text.
+        print(
+            f"Analysis provider failure: type={type(exc).__name__}, "
+            f"status={getattr(exc, 'status_code', None)}, "
+            f"code={getattr(exc, 'code', None)}",
+            flush=True,
+        )
+        raise HTTPException(
+            status_code=503,
+            detail="Analysis service is temporarily unavailable.",
+        )
 
 
 @app.get("/health")
@@ -267,6 +416,43 @@ async def rewrite(
         "formal": "Use a professional, formal, respectful tone.",
         "casual": "Use a natural, friendly, respectful tone without weakening boundaries.",
     }
+
+    incident_instructions = {
+        "general": "Context: General conversation. Preserve the user's actual purpose and relationship to the recipient.",
+        "personal": "Context: Personal or relationship communication. Preserve emotional nuance and boundaries. Do not assume romance, reconciliation, blame, or the recipient's motives.",
+        "school": "Context: School or lecturer communication. Keep the message respectful and clear while preserving the student's actual concern, request, and position.",
+        "work": "Context: Workplace communication. Prioritise clarity, professionalism, accountability, and appropriate boundaries without inventing policies or commitments.",
+        "customer": "Context: Customer service. Clearly preserve the issue, requested remedy, relevant facts, and any stated deadline. Do not promise an outcome the user did not offer.",
+        "social": "Context: Social media. Keep the wording natural and suitable for public reading without adding claims, escalating conflict, or changing the user's position.",
+        "conflict": "Context: Conflict or complaint. Keep the core complaint and accountability clear while reducing unnecessary personal attacks. Do not dilute a legitimate concern or invent evidence.",
+    }
+
+    tone_goal_instructions = {
+        "deescalate": "Goal: Reduce unnecessary tension while retaining the user's concern, meaning, and boundaries.",
+        "response": "Goal: Make the question or request easy to identify and respond to. Do not pressure the recipient or invent a deadline.",
+        "apologize": "Goal: Express an apology naturally where appropriate. Do not invent an admission of fault, responsibility, or facts not supported by the source.",
+        "professional": "Goal: Prioritise clear, professional wording without making the message cold, submissive, or unnecessarily formal.",
+        "relationship": "Goal: Communicate considerately and avoid needless damage to the relationship without forcing agreement, affection, forgiveness, or reconciliation.",
+        "firm": "Goal: Make the user's position and boundaries clear and firm while remaining respectful. Do not turn a refusal into agreement or an optional request.",
+    }
+
+    courtesy_level = request.courtesy
+    if courtesy_level <= 30:
+        courtesy_instructions = (
+            "Courtesy preference: Low. Be direct and restrained, but remain respectful; "
+            "do not introduce insults or hostility."
+        )
+    elif courtesy_level <= 69:
+        courtesy_instructions = (
+            "Courtesy preference: Moderate. Use natural, balanced politeness without "
+            "excessive softening or unnecessary formalities."
+        )
+    else:
+        courtesy_instructions = (
+            "Courtesy preference: High. Use warmer and more considerate phrasing, "
+            "but preserve the user's position and boundaries. Do not add unsupported "
+            "apologies, admissions, promises, or expressions of affection."
+        )
 
     system_prompt = (
         "Act as a skilled message editor. Rewrite the user's message to make it "
@@ -315,6 +501,12 @@ async def rewrite(
         "a long speech. Preserve meaningful emphasis and intentional repetition. "
         "TONE: Apply the selected tone without changing the user's position. "
         + tone_instructions[request.tone]
+        + "\n"
+        + incident_instructions[request.incident_preset]
+        + "\n"
+        + tone_goal_instructions[request.tone_goal]
+        + "\n"
+        + courtesy_instructions
     )
 
     try:
@@ -451,6 +643,7 @@ async def generate_caption(
         if request.hashtags
         else "Do not include hashtags."
     )
+
 
     system_prompt = (
         "Act as a rigorous, fact-first caption writer and editor. Create a caption "
