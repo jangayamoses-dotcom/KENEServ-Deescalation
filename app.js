@@ -2987,7 +2987,13 @@ applyCaptionInterfaceLanguage();
             aiStatus,
             "AI Rewrite",
             "/rewrite",
-            { message: original, tone },
+            {
+                message: original,
+                tone,
+                incident_preset: incidentPreset.value,
+                tone_goal: toneGoal.value,
+                courtesy: Number(courtesySlider.value)
+            },
             result => {
                 if (!result || typeof result.rewrite !== "string" || !result.rewrite.trim()) {
                     setStatus(
@@ -3104,4 +3110,251 @@ applyCaptionInterfaceLanguage();
         rewriteButton.textContent = say("AI Rewrite", "Boresha kwa AI");
         captionButton.textContent = say("AI Caption", "Maelezo kwa AI");
     });
+})();
+
+// KENESERV_CONTEXT_ANALYSIS_V1
+(() => {
+    "use strict";
+
+    const API_BASE = "https://keneserv-deescalation.onrender.com";
+    const input = document.getElementById("message");
+    if (!input || window.__keneservContextAnalysisInstalled) return;
+    window.__keneservContextAnalysisInstalled = true;
+
+    const lang = () =>
+        typeof currentLanguage !== "undefined" && currentLanguage === "sw" ? "sw" : "en";
+
+    let timer = null;
+    let sequence = 0;
+    let activeController = null;
+
+    const status = document.createElement("p");
+    status.id = "ai-analysis-status";
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+    status.style.fontSize = "0.9em";
+    status.style.margin = "8px 0";
+
+    const reasons = document.getElementById("score-reasons");
+    if (reasons && reasons.parentNode) {
+        reasons.parentNode.insertBefore(status, reasons);
+    } else {
+        input.insertAdjacentElement("afterend", status);
+    }
+
+    function say(en, sw) {
+        status.textContent = lang() === "sw" ? sw : en;
+    }
+
+    function consent() {
+        let saved = "";
+        try {
+            saved = sessionStorage.getItem("keneserv_context_ai_consent") || "";
+        } catch (_) {}
+
+        if (saved === "accepted") return true;
+        if (saved === "declined") return false;
+
+        const message = lang() === "sw"
+            ? "UCHAMBUZI WA AI: Ili kuchanganua ujumbe kwa kuelewa muktadha, ujumbe wako utatumwa kwa seva ya KENEServ na mtoa huduma wa AI (Groq/Qwen). Je, unakubali? Ukikataa, uchanganuzi wa ndani pekee utaendelea."
+            : "AI ANALYSIS CONSENT: To analyse the context of your message, its text will be sent to the KENEServ hosted server and AI provider (Groq/Qwen). Do you consent? If you decline, local-only analysis will continue.";
+
+        const accepted = window.confirm(message);
+        try {
+            sessionStorage.setItem(
+                "keneserv_context_ai_consent",
+                accepted ? "accepted" : "declined"
+            );
+        } catch (_) {}
+
+        return accepted;
+    }
+
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, c => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;",
+            '"': "&quot;", "'": "&#39;"
+        })[c]);
+    }
+
+    function renderHighlights(text, signals) {
+        const box = document.getElementById("highlight-preview");
+        if (!box || !signals.length) return;
+
+        const terms = [...new Set(signals
+            .map(s => typeof s.text === "string" ? s.text : "")
+            .filter(s => s && text.includes(s)))]
+            .sort((a, b) => b.length - a.length);
+
+        if (!terms.length) return;
+
+        const pattern = new RegExp(
+            terms.map(s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"),
+            "g"
+        );
+
+        let html = "";
+        let last = 0;
+        for (const match of text.matchAll(pattern)) {
+            html += escapeHtml(text.slice(last, match.index));
+            html += '<mark>' + escapeHtml(match[0]) + '</mark>';
+            last = match.index + match[0].length;
+        }
+        html += escapeHtml(text.slice(last));
+        box.innerHTML = html;
+    }
+
+    function applyAnalysis(data, text, requestId) {
+        if (requestId !== sequence || input.value !== text) return;
+
+        const intensity = Number(data.intensity);
+        const warmth = Number(data.warmth);
+        const professionalism = Number(data.professionalism);
+
+        if (![intensity, warmth, professionalism].every(
+            n => Number.isFinite(n) && n >= 0 && n <= 100
+        )) throw new Error("Invalid analysis scores");
+
+        const signals = Array.isArray(data.signals)
+            ? data.signals.filter(s =>
+                s && typeof s.text === "string" &&
+                s.text.length > 0 && text.includes(s.text)
+            ).slice(0, 8)
+            : [];
+
+        const anger = document.getElementById("anger-score");
+        const warm = document.getElementById("warmth-score");
+        const professional = document.getElementById("professional-score");
+        const tone = document.getElementById("tone-label");
+
+        if (anger) anger.textContent = Math.round(intensity) + "%";
+        if (warm) warm.textContent = Math.round(warmth) + "%";
+        if (professional) professional.textContent = Math.round(professionalism) + "%";
+        if (tone && typeof data.tone_label === "string") {
+            tone.textContent = data.tone_label;
+        }
+
+        if (typeof updateGaugeScale === "function") {
+            updateGaugeScale(intensity);
+        } else {
+            const gauge = document.getElementById("gauge-fill");
+            if (gauge) gauge.style.width = intensity + "%";
+        }
+
+        const detected = document.getElementById("detected-words");
+        if (detected && signals.length) {
+            detected.textContent = signals.map(s => s.text).join(", ");
+        }
+        renderHighlights(text, signals);
+
+        if (reasons) {
+            reasons.replaceChildren();
+            if (typeof data.summary === "string" && data.summary.trim()) {
+                const summary = document.createElement("p");
+                summary.textContent = data.summary;
+                reasons.appendChild(summary);
+            }
+            signals.forEach(s => {
+                const row = document.createElement("p");
+                const category = String(s.category || "other");
+                const severity = String(s.severity || "moderate");
+                row.textContent = s.text + " — " + category + " (" + severity + ")";
+                reasons.appendChild(row);
+            });
+        }
+
+        const tips = document.getElementById("tips-content");
+        if (tips && Array.isArray(data.tips) && data.tips.length) {
+            tips.replaceChildren();
+            data.tips.slice(0, 4).forEach(tip => {
+                const row = document.createElement("p");
+                row.textContent = String(tip);
+                tips.appendChild(row);
+            });
+        }
+
+        say(
+            "Contextual AI analysis complete (Groq + Qwen).",
+            "Uchambuzi wa muktadha wa AI umekamilika (Groq + Qwen)."
+        );
+    }
+
+    async function analyse(text, requestId) {
+        if (!text.trim() || requestId !== sequence) return;
+
+        if (!consent()) {
+            say(
+                "Local-only mode: your message was not sent to AI.",
+                "Hali ya ndani pekee: ujumbe wako haukutumwa kwa AI."
+            );
+            return;
+        }
+
+        if (requestId !== sequence || input.value !== text) return;
+
+        if (activeController) activeController.abort();
+        activeController = new AbortController();
+        const controller = activeController;
+        const timeout = window.setTimeout(() => controller.abort(), 16000);
+
+        say(
+            "Analysing context with AI… local analysis remains available.",
+            "Inachanganua muktadha kwa AI… uchanganuzi wa ndani bado unapatikana."
+        );
+
+        try {
+            const response = await fetch(API_BASE + "/analyze", {
+                method: "POST",
+                credentials: "omit",
+                cache: "no-store",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: text,
+                    interface_language: lang()
+                }),
+                signal: controller.signal
+            });
+
+            if (!response.ok) {
+                throw new Error("Analysis request failed (" + response.status + ")");
+            }
+
+            const data = await response.json();
+            if (requestId !== sequence || input.value !== text) return;
+            applyAnalysis(data, text, requestId);
+        } catch (error) {
+            if (error.name === "AbortError" && requestId !== sequence) return;
+            say(
+                "AI analysis unavailable. Your local analysis is still active.",
+                "Uchanganuzi wa AI haupatikani kwa sasa. Uchanganuzi wa ndani bado unafanya kazi."
+            );
+            console.warn("KENEServ contextual analysis:", error.message);
+        } finally {
+            window.clearTimeout(timeout);
+            if (activeController === controller) activeController = null;
+        }
+    }
+
+    function scheduleAnalysis() {
+        sequence++;
+        const requestId = sequence;
+        if (activeController) activeController.abort();
+        window.clearTimeout(timer);
+
+        const text = input.value;
+        if (!text.trim()) {
+            say("", "");
+            return;
+        }
+
+        timer = window.setTimeout(() => analyse(text, requestId), 850);
+    }
+
+    input.addEventListener("input", scheduleAnalysis);
+    document.addEventListener("caption-interface-language-change", scheduleAnalysis);
+
+    say(
+        "Local analysis ready. Contextual AI analysis requires your consent.",
+        "Uchanganuzi wa ndani uko tayari. Uchanganuzi wa muktadha wa AI unahitaji idhini yako."
+    );
 })();
