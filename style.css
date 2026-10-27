@@ -1837,3 +1837,21 @@ body.dark-mode .secondary-action-row button {
         animation-iteration-count: 3;
     }
 }
+/* Dark-mode readability fix for highlighted language signals */
+body.dark-mode .highlight-preview {
+    background: #162033 !important;
+    color: #f2f4f7 !important;
+    border-color: #475467 !important;
+}
+
+body.dark-mode .highlight-preview mark {
+    background: #713f12 !important;
+    color: #fef3c7 !important;
+}
+
+body.dark-mode #detected-words,
+body.dark-mode #detected-words span,
+body.dark-mode #detected-words strong {
+    color: #f2f4f7 !important;
+}
+
