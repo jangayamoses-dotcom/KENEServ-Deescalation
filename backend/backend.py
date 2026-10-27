@@ -1,4 +1,4 @@
-import os
+﻿import os
 import json
 import re
 from contextlib import asynccontextmanager
@@ -239,6 +239,7 @@ class RewriteRequest(BaseModel):
         pattern="^(deescalate|response|apologize|professional|relationship|firm)$",
     )
     courtesy: int = Field(default=60, ge=0, le=100)
+    instruction: str = Field(default="", max_length=500)
 
     @field_validator("message")
     @classmethod
@@ -535,6 +536,7 @@ async def rewrite(
         + tone_goal_instructions[request.tone_goal]
         + "\n"
         + courtesy_instructions
+        + ("\nADDITIONAL USER REQUEST: " + request.instruction.strip() + ". Apply this request only when it does not conflict with the meaning-preservation, factual-restraint, language, tone, or safety rules above. " if request.instruction.strip() else """)
     )
 
     try:
@@ -614,6 +616,7 @@ class CaptionRequest(BaseModel):
     )
     hashtags: bool = True
     call_to_action: str = Field(default="", max_length=MAX_CAPTION_CTA_LENGTH)
+    variation: int = Field(default=0, ge=0, le=100)
 
     @field_validator("description")
     @classmethod
@@ -722,6 +725,20 @@ async def generate_caption(
         "clear, specific, and human-sounding without becoming robotic, promotional, "
         "overly dramatic, repetitive, or needlessly formal. Do not repeat one idea "
         "in different words to make the caption longer. "
+        "EDITORIAL TRANSFORMATION: Treat the description as source material, "
+        "not as a caption to copy. Identify its central, explicitly supported "
+        "message and write a publication-ready caption with a clear opening, "
+        "a logical flow, and a purposeful ending when the source supports one. "
+        "Reorganise rough notes and fragmented wording into natural prose instead "
+        "of mechanically repeating the input or replacing words with synonyms. "
+        "Choose a useful angle appropriate to the stated purpose and platform, "
+        "but never manufacture a news angle, event, activity, lesson, impact, "
+        "or conclusion. Remove redundant wording while retaining all material "
+        "facts and qualifications. Do not add generic motivational statements, "
+        "rhetorical questions, engagement bait, or calls to action unless requested "
+        "or supported by the supplied source. If the description is already a "
+        "well-written caption, improve it only where there is a clear benefit; "
+        "do not change wording merely to make it look different. "
         "FINAL FACT CHECK: Before responding, check every sentence, name, number, "
         "date, location, attribution, implied outcome, emotion, and hashtag against "
         "the supplied source. Remove or narrow anything unsupported. Never explain "
@@ -732,6 +749,7 @@ async def generate_caption(
         f"Length: {length_instructions[request.length]} "
         f"Output language: {request.language}. "
         f"{hashtag_instruction}"
+        + ("\nVARIATION REQUEST: Produce a meaningfully different caption structure and wording from previous versions, while preserving the same source-supported facts, uncertainty, attribution, and meaning. Do not invent or remove material facts. " if request.variation > 0 else """)
     )
 
     user_content = (

@@ -165,7 +165,7 @@ body.dark-mode .why-card h3 {
             </div>
         </section>
 
-        <section class="language-alert" id="language-alert">
+        <section class="language-alert" id="language-alert" hidden>
             <h2>Language signals</h2>
             <p id="detected-words">Hakuna lugha kali iliyogunduliwa.</p>
         </section>
@@ -202,7 +202,7 @@ body.dark-mode .why-card h3 {
 
         <!-- Score explanation -->
         <div id="score-explanation" class="score-explanation">
-            <div class="explanation-title" id="score-explanation-title">Why this score?</div>
+<!-- Score explanation heading hidden; explanation remains below. -->
             <div id="score-reasons"></div>
         </div>
         <div id="communication-tips" class="communication-tips">
@@ -304,11 +304,12 @@ body.dark-mode .why-card h3 {
             </div>
         </section>
         <button id="copy-button">Copy polished message</button>
-<button id="save-history-button" type="button">Save to history</button>
-<button id="share-button" type="button">Share polished message</button>
+<div class="secondary-action-row">
+    <button id="save-history-button" type="button">Save to history</button>
+    <button id="share-button" type="button">Share polished message</button>
+</div>
 <div id="ai-controls" class="ai-controls">
     <div class="main-action-row">
-        <button id="ai-rewrite-button" type="button">AI Rewrite</button>
         <button id="reset-button" type="button">Clear / Reset</button>
     </div>
     <div id="ai-status" class="ai-status" role="status" aria-live="polite"></div>
@@ -415,15 +416,7 @@ body.dark-mode .why-card h3 {
             <div id="caption-status" class="caption-status" role="status" aria-live="polite"></div>
 
             <section id="caption-result-section" class="caption-result" aria-labelledby="caption-result-title" hidden>
-                <div id="ai-caption-ready" class="ai-ready-card" role="status" aria-live="polite" hidden>
-                    <span class="ai-ready-icon" aria-hidden="true">?</span>
-                    <div><h3 id="ai-caption-ready-title">AI Caption Ready</h3>
-                    <p id="ai-caption-ready-text">Your caption is ready. Review names, dates and facts before publishing.</p></div>
-                </div>
-                <div class="caption-result-header">
-                    <h3 id="caption-result-title">Your Caption</h3>
-                    <span id="caption-result-style"></span>
-                </div>
+
                 <div id="caption-result-text" class="caption-result-text" tabindex="0"></div>
                 <div class="caption-result-meta">
                     <span id="caption-result-count">0 characters</span>
@@ -521,3 +514,5 @@ body.dark-mode .why-card h3 {
     <script src="app.js"></script>
 </body>
 </html>
+
+
