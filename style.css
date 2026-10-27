@@ -1855,3 +1855,93 @@ body.dark-mode #detected-words strong {
     color: #f2f4f7 !important;
 }
 
+
+/* Dark-mode readability for contextual AI status */
+body.dark-mode #ai-analysis-status {
+    background-color: #162033 !important;
+    color: #f2f4f7 !important;
+    border-color: #475467 !important;
+}
+
+/* Final dark-mode contrast fix for contextual AI status */
+body.dark-mode #ai-analysis-status,
+body.dark-mode #ai-analysis-status * {
+    background: #162033 !important;
+    color: #f2f4f7 !important;
+    border-color: #475467 !important;
+    -webkit-text-fill-color: #f2f4f7 !important;
+    opacity: 1 !important;
+}
+
+/* Dark-mode background for the entire contextual analysis area */
+body.dark-mode .analysis,
+body.dark-mode .analysis > *,
+body.dark-mode .analysis section,
+body.dark-mode .analysis .analysis-card,
+body.dark-mode .analysis .gauge-card,
+body.dark-mode .analysis .score-card,
+body.dark-mode .analysis #ai-analysis-status {
+    background-color: #1d2939 !important;
+    border-color: #344054 !important;
+}
+
+body.dark-mode .analysis #ai-analysis-status {
+    color: inherit !important;
+    -webkit-text-fill-color: currentColor !important;
+}
+
+/* Dark-mode fix for the score explanation rectangle */
+body.dark-mode #score-explanation {
+    background: #1d2939 !important;
+    color: inherit !important;
+    border-color: #344054 !important;
+}
+
+body.dark-mode #score-reasons {
+    background: transparent !important;
+    color: inherit !important;
+}
+
+body.dark-mode #score-reasons .score-reason {
+    color: inherit;
+}
+
+/* Final dark-mode styling for score explanation: plain background, white text, no highlights */
+body.dark-mode #score-explanation,
+body.dark-mode #score-explanation #score-reasons {
+    background: #000000 !important;
+    background-image: none !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #score-explanation mark,
+body.dark-mode #score-explanation #score-reasons mark,
+body.dark-mode #detected-words mark,
+body.dark-mode #highlight-preview mark {
+    background: transparent !important;
+    color: #ffffff !important;
+    filter: none !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+}
+
+/* Enforce dark mode on score explanation and remove white gradient */
+body.dark-mode #score-explanation {
+    background: #000000 !important;
+    background-image: none !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #score-explanation #score-reasons,
+body.dark-mode #score-explanation #score-reasons * {
+    background-image: none !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #score-explanation mark,
+body.dark-mode #score-explanation #score-reasons mark {
+    background: transparent !important;
+    color: #ffffff !important;
+    filter: none !important;
+    box-shadow: none !important;
+}
