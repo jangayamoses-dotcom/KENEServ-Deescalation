@@ -536,7 +536,7 @@ async def rewrite(
         + tone_goal_instructions[request.tone_goal]
         + "\n"
         + courtesy_instructions
-        + ("\nADDITIONAL USER REQUEST: " + request.instruction.strip() + ". Apply this request only when it does not conflict with the meaning-preservation, factual-restraint, language, tone, or safety rules above. " if request.instruction.strip() else """)
+        + ("\nADDITIONAL USER REQUEST: " + request.instruction.strip() + ". Apply this request only when it does not conflict with the meaning-preservation, factual-restraint, language, tone, or safety rules above. " if request.instruction.strip() else "")
     )
 
     try:
@@ -749,7 +749,7 @@ async def generate_caption(
         f"Length: {length_instructions[request.length]} "
         f"Output language: {request.language}. "
         f"{hashtag_instruction}"
-        + ("\nVARIATION REQUEST: Produce a meaningfully different caption structure and wording from previous versions, while preserving the same source-supported facts, uncertainty, attribution, and meaning. Do not invent or remove material facts. " if request.variation > 0 else """)
+        + ("\nVARIATION REQUEST: Produce a meaningfully different caption structure and wording from previous versions, while preserving the same source-supported facts, uncertainty, attribution, and meaning. Do not invent or remove material facts. " if request.variation > 0 else "")
     )
 
     user_content = (
