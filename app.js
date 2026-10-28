@@ -3423,3 +3423,52 @@ applyCaptionInterfaceLanguage();
 
 
 
+
+
+/* SEVERE LANGUAGE INTENSITY OVERRIDE */
+(() => {
+    const input = document.getElementById("message-input");
+    if (!input) return;
+
+    const applySevereLanguageSignal = () => {
+        const text = input.value || "";
+        const severeSlur = /\bn[i1!|]gg(?:er|a)\b/i.test(text);
+        const directHostility = /\b(shut up|you are useless|you're useless|i hate you|idiot|stupid)\b/i.test(text);
+
+        if (!severeSlur && !directHostility) return;
+
+        const intensity = severeSlur ? 85 : 65;
+        const anger = document.getElementById("anger-score");
+        const warmth = document.getElementById("warmth-score");
+        const professionalism = document.getElementById("professional-score");
+        const tone = document.getElementById("tone-label");
+        const fill = document.getElementById("gauge-fill");
+        const detected = document.getElementById("detected-words");
+        const preview = document.getElementById("highlight-preview");
+
+        if (anger) anger.textContent = intensity + "%";
+        if (warmth) warmth.textContent = "10%";
+        if (professionalism) professionalism.textContent = "10%";
+        if (tone) tone.textContent = "Frustrated and Aggressive";
+
+        if (fill) {
+            fill.style.width = intensity + "%";
+            fill.style.transition = "width 300ms ease";
+        }
+
+        if (detected) {
+            detected.textContent = severeSlur
+                ? "Severely offensive language detected."
+                : "Hostile or insulting language detected.";
+        }
+        if (preview) {
+            preview.textContent = severeSlur
+                ? "A severe offensive-language signal was detected."
+                : "A hostile-language signal was detected.";
+        }
+    };
+
+    input.addEventListener("input", applySevereLanguageSignal);
+    input.addEventListener("change", applySevereLanguageSignal);
+    applySevereLanguageSignal();
+})();
