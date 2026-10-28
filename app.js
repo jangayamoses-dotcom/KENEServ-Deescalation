@@ -3454,7 +3454,11 @@ applyCaptionInterfaceLanguage();
         }
         if (warmth) warmth.textContent = "10%";
         if (professionalism) professionalism.textContent = "10%";
-        if (tone) tone.textContent = "Frustrated and Aggressive";
+        if (tone) {
+            tone.textContent = currentLanguage === "sw"
+                ? "Wenye hasira na mkali"
+                : "Frustrated and Aggressive";
+        }
 
         if (fill) {
             fill.style.width = intensity + "%";
