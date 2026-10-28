@@ -3454,6 +3454,11 @@ applyCaptionInterfaceLanguage();
         if (fill) {
             fill.style.width = intensity + "%";
             fill.style.transition = "width 300ms ease";
+            fill.style.backgroundColor =
+                intensity >= 75 ? "#dc2626" :
+                intensity >= 50 ? "#ea580c" :
+                intensity >= 30 ? "#eab308" :
+                intensity >= 15 ? "#84cc16" : "#16a34a";
         }
 
         if (detected) {
