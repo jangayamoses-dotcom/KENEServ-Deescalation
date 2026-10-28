@@ -844,7 +844,7 @@ function applyLanguage() {
 
     const scaleLabels = currentLanguage === "sw"
         ? ["Tulivu", "Kidogo", "Wastani", "Juu", "Juu sana"]
-        : ["Calm", "Slight", "Moderate", "High", "Very High"];
+        : ["Low", "Slight", "Moderate", "High", "Very High"];
 
     if (!messageInput.value.trim()) {
         toneLabel.textContent = currentLanguage === "sw" ? "Hakuna ujumbe uliochanganuliwa" : "No message analyzed";
