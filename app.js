@@ -3427,7 +3427,7 @@ applyCaptionInterfaceLanguage();
 
 /* SEVERE LANGUAGE INTENSITY OVERRIDE */
 (() => {
-    const input = document.getElementById("message-input");
+    const input = messageInput;
     if (!input) return;
 
     const applySevereLanguageSignal = () => {
