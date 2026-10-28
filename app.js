@@ -3446,7 +3446,12 @@ applyCaptionInterfaceLanguage();
         const detected = document.getElementById("detected-words");
         const preview = document.getElementById("highlight-preview");
 
-        if (anger) anger.textContent = intensity + "%";
+        if (anger) {
+            anger.textContent = intensity + "%";
+            anger.style.color = intensity >= 75 ? "#dc2626" :
+                intensity >= 50 ? "#ea580c" :
+                intensity >= 30 ? "#ca8a04" : "#16a34a";
+        }
         if (warmth) warmth.textContent = "10%";
         if (professionalism) professionalism.textContent = "10%";
         if (tone) tone.textContent = "Frustrated and Aggressive";
