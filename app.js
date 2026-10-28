@@ -3452,6 +3452,9 @@ applyCaptionInterfaceLanguage();
                 intensity >= 50 ? "#ea580c" :
                 intensity >= 30 ? "#ca8a04" : "#16a34a";
         }
+        if (typeof updateGaugeScale === "function") {
+            updateGaugeScale(intensity);
+        }
         if (warmth) warmth.textContent = "10%";
         if (professionalism) professionalism.textContent = "10%";
         if (tone) {
