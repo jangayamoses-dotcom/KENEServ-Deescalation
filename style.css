@@ -1954,3 +1954,256 @@ body.dark-mode #score-explanation #score-reasons mark {
     box-shadow: none !important;
 }
 
+
+/* ENTERPRISE TYPOGRAPHY — schools, businesses and professional organisations */
+body {
+    font-family: "Segoe UI", Inter, Roboto, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+header h1 {
+    font-size: clamp(30px, 4.5vw, 40px);
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+}
+
+header p {
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+h2, section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+}
+
+h3 {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+textarea,
+select,
+input {
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+button {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: 0.005em;
+}
+
+#anger-score {
+    font-size: 38px;
+    font-weight: 750;
+    line-height: 1.15;
+}
+
+#tone-label {
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.scores div span:first-child {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.scores div span:last-child {
+    font-size: 23px;
+    font-weight: 750;
+}
+
+.rewrite-box,
+.comparison-text {
+    font-size: 16px;
+    line-height: 1.75;
+}
+
+.comparison-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+}
+
+.tips-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+#tips-content {
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.quality-grid span {
+    font-size: 14px;
+}
+
+.quality-grid strong {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.message-count,
+.history-header p {
+    font-size: 13px;
+}
+
+.history-message {
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.history-rewrite {
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.history-meta {
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    body {
+        font-size: 15px;
+    }
+
+    header h1 {
+        font-size: clamp(27px, 7vw, 34px);
+    }
+
+    header p {
+        font-size: 14px;
+    }
+
+    h2, section h2 {
+        font-size: 18px;
+    }
+
+    .rewrite-box,
+    .comparison-text {
+        font-size: 15px;
+    }
+}
+
+/* FINAL ANALYSIS DASHBOARD DARK-MODE READABILITY */
+body.dark-mode .analysis,
+body.dark-mode .analysis .gauge-card,
+body.dark-mode .analysis .scores,
+body.dark-mode .communication-tips,
+body.dark-mode .message-quality {
+    color: #f2f4f7 !important;
+}
+
+body.dark-mode .analysis .gauge-card h2,
+body.dark-mode .analysis .scores span,
+body.dark-mode .analysis .scores strong,
+body.dark-mode .tips-title,
+body.dark-mode #tips-content,
+body.dark-mode .quality-grid span,
+body.dark-mode .quality-grid strong {
+    color: #f2f4f7 !important;
+    -webkit-text-fill-color: #f2f4f7 !important;
+}
+
+body.dark-mode .scores div,
+body.dark-mode .quality-grid > div {
+    background: #162033 !important;
+    border-color: #475467 !important;
+}
+
+body.dark-mode .gauge-scale span {
+    color: #e4e7ec !important;
+}
+
+body.dark-mode .gauge-scale span.active {
+    background: #ea580c !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #score-explanation {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #score-reasons,
+body.dark-mode #score-reasons * {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+body.dark-mode #score-reasons .score-reason {
+    background: #1d2939 !important;
+    border-color: #475467 !important;
+}
+
+body.dark-mode #score-reasons .reason-dot {
+    color: inherit !important;
+    -webkit-text-fill-color: currentColor !important;
+}
+
+body.dark-mode .communication-tips,
+body.dark-mode .message-quality {
+    background: #1d2939 !important;
+    border-color: #475467 !important;
+}
+
+
+/* UNIFIED DARK-MODE ANALYSIS PANEL */
+body.dark-mode #score-explanation {
+    background: #1d2939 !important;
+    background-image: none !important;
+    border: 1px solid #475467 !important;
+    color: #f2f4f7 !important;
+}
+
+body.dark-mode #score-explanation #ai-analysis-status,
+body.dark-mode #score-explanation #score-reasons {
+    background: transparent !important;
+    background-image: none !important;
+    color: #f2f4f7 !important;
+}
+
+body.dark-mode #score-explanation #score-reasons .score-reason {
+    background: #162033 !important;
+    border-color: #344054 !important;
+    color: #f2f4f7 !important;
+}
+
+
+/* FINAL OVERRIDE: keep the contextual analysis panel consistent in dark mode */
+body.dark-mode .analysis #score-explanation,
+body.dark-mode .analysis #score-explanation #ai-analysis-status,
+body.dark-mode .analysis #score-explanation #score-reasons {
+    background: #1d2939 !important;
+    background-color: #1d2939 !important;
+    background-image: none !important;
+    color: #f2f4f7 !important;
+    border-color: #475467 !important;
+}
+
+body.dark-mode .analysis #score-explanation #score-reasons .score-reason {
+    background: #162033 !important;
+    color: #f2f4f7 !important;
+    border-color: #344054 !important;
+}
+
