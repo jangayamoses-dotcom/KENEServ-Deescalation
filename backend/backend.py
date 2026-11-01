@@ -1,4 +1,4 @@
-﻿import os
+import os
 import json
 import re
 from contextlib import asynccontextmanager
@@ -283,7 +283,7 @@ class AnalyzeResponse(BaseModel):
     warmth: int = Field(ge=0, le=100)
     professionalism: int = Field(ge=0, le=100)
     tone_label: str = Field(min_length=1, max_length=60)
-    summary: str = Field(max_length=300)
+    summary: str = Field(max_length=600)
     signals: list[AnalysisSignal] = Field(max_length=8)
     tips: list[str] = Field(max_length=4)
     model: str
@@ -326,7 +326,13 @@ async def analyze_message(
         "exact substring copied from the message. Do not invent quotations. Use "
         "categories threat, insult, hostility, blame, pressure, dismissive, profanity, "
         "sarcasm, boundary, concern, or other. Do not label a reasonable boundary "
-        "or legitimate complaint as aggression by default. Give up to 4 practical, "
+        "or legitimate complaint as aggression by default. "
+        "Distinguish emotional intensity from harmful intent. Do not automatically classify questions, disagreement, complaints, refusals, warnings, or reasonable boundaries as hostility. "
+        "Interpret negation, quotation, sarcasm, idioms, cultural context, and mixed-language expressions carefully. Do not mistake direct Kenyan communication or slang for aggression by default. "
+        "Do not confuse politeness with professionalism. Evaluate clarity, respect, appropriateness, and context separately. "
+        "Every signal must be supported by the exact quoted text and its surrounding context. Do not invent evidence, motives, emotional states, or circumstances. "
+        "When meaning or language is uncertain, state that uncertainty and avoid confident negative classifications. "
+        "The summary must be factual, concise, evidence-based, and no longer than 600 characters. "
         "non-judgmental communication tips. Do not rewrite the message. "
         "Write tone_label, summary, signal explanations, and tips in "
         + output_language
