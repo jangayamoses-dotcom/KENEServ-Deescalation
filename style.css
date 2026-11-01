@@ -2207,3 +2207,56 @@ body.dark-mode .analysis #score-explanation #score-reasons .score-reason {
     border-color: #344054 !important;
 }
 
+
+/* Subtle twinkling decorative dots on the four quick-action buttons */
+#quick-calm,
+#quick-professional,
+#quick-friendly,
+#quick-shorten {
+    position: relative;
+    overflow: hidden;
+}
+
+#quick-calm::after,
+#quick-professional::after,
+#quick-friendly::after,
+#quick-shorten::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,.95) 1px, transparent 2px),
+        radial-gradient(circle, rgba(129,140,248,.9) 1px, transparent 2px),
+        radial-gradient(circle, rgba(255,255,255,.8) 1px, transparent 2px),
+        radial-gradient(circle, rgba(99,179,237,.9) 1px, transparent 2px);
+    background-size: 37px 31px, 53px 43px, 67px 47px, 79px 59px;
+    background-position: 8px 5px, 21px 13px, 39px 7px, 14px 25px;
+    background-repeat: repeat;
+    opacity: .35;
+    animation: quickActionTwinkle 3s ease-in-out infinite alternate;
+}
+
+@keyframes quickActionTwinkle {
+    0% {
+        opacity: .12;
+        background-position: 8px 5px, 21px 13px, 39px 7px, 14px 25px;
+    }
+    50% {
+        opacity: .48;
+    }
+    100% {
+        opacity: .2;
+        background-position: 15px 12px, 27px 19px, 32px 14px, 20px 18px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #quick-calm::after,
+    #quick-professional::after,
+    #quick-friendly::after,
+    #quick-shorten::after {
+        animation: none;
+        opacity: .25;
+    }
+}
