@@ -3420,10 +3420,14 @@ applyCaptionInterfaceLanguage();
         }
 
 
-        say(
-            "AI context analysis complete. Scores and guidance updated.",
-            "Uchanganuzi wa muktadha wa AI umekamilika. Alama na mwongozo vimesasishwa."
-        );
+        const isSwahili = lang() === "sw";
+        status.replaceChildren();
+        const heading = document.createElement("strong");
+        heading.textContent = isSwahili ? "Uchanganuzi wa muktadha wa AI umekamilika." : "AI context analysis complete.";
+        const details = document.createTextNode(isSwahili ? " Alama na mwongozo vimesasishwa. " : " Scores and guidance updated. ");
+        const availability = document.createElement("strong");
+        availability.textContent = isSwahili ? "Uchanganuzi wa ndani unapatikana." : "Local analysis available.";
+        status.append(heading, details, availability);
 
     }
     window.kenesafeRestoreAnalysis = function () {
