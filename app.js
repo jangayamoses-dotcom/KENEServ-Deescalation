@@ -1,4 +1,4 @@
-﻿const messageInput = document.getElementById("message");
+const messageInput = document.getElementById("message");
 const gaugeFill = document.getElementById("gauge-fill");
 const angerScore = document.getElementById("anger-score");
 const toneLabel = document.getElementById("tone-label");
@@ -812,6 +812,7 @@ function applyLanguage() {
             professional: "Fanya uwe wa kitaalamu",
             friendly: "Fanya uwe wa kirafiki",
             shorten: "Fupisha ujumbe huu",
+            edit: "Hariri",
             group: "Vitendo vya kuboresha ujumbe"
         }
         : {
@@ -819,6 +820,7 @@ function applyLanguage() {
             professional: "Make Professional",
             friendly: "Make Friendly",
             shorten: "Shorten This Message",
+            edit: "Edit",
             group: "Quick rewrite actions"
         };
 
@@ -827,12 +829,14 @@ function applyLanguage() {
     const quickProfessionalButton = document.getElementById("quick-professional");
     const quickFriendlyButton = document.getElementById("quick-friendly");
     const quickShortenButton = document.getElementById("quick-shorten");
+    const quickEditButton = document.getElementById("quick-edit");
 
     if (quickActionGroup) quickActionGroup.setAttribute("aria-label", quickActionLabels.group);
     if (quickCalmButton) quickCalmButton.textContent = quickActionLabels.calm;
     if (quickProfessionalButton) quickProfessionalButton.textContent = quickActionLabels.professional;
     if (quickFriendlyButton) quickFriendlyButton.textContent = quickActionLabels.friendly;
     if (quickShortenButton) quickShortenButton.textContent = quickActionLabels.shorten;
+    if (quickEditButton) quickEditButton.textContent = quickActionLabels.edit;
     const languageToggleLabel = document.getElementById("language-toggle-label"); if (languageToggleLabel) languageToggleLabel.textContent = t.button;
     if (qualityTitle) qualityTitle.textContent = t.messageQuality;
     if (clarityLabel) clarityLabel.textContent = t.clarity;
@@ -2976,6 +2980,73 @@ applyCaptionInterfaceLanguage();
         }
     }
 
+    const quickEditButton = document.getElementById("quick-edit");
+
+    if (quickEditButton) {
+        quickEditButton.addEventListener("click", () => {
+            const original = messageInput.value.trim();
+
+            if (!original) {
+                messageInput.focus();
+                setStatus(
+                    aiStatus,
+                    say("Enter a message to edit first.", "Andika ujumbe unaotaka kuhariri kwanza."),
+                    "info"
+                );
+                return;
+            }
+
+            if (original.length > 4000) {
+                setStatus(
+                    aiStatus,
+                    say("Your message exceeds the 4,000-character limit.", "Ujumbe wako umezidi kikomo cha herufi 4,000."),
+                    "error"
+                );
+                return;
+            }
+
+            if (rewriteReadyCard) {
+                rewriteReadyCard.hidden = true;
+            }
+
+            runRequest(
+                quickEditButton,
+                aiStatus,
+                isSwahili() ? "Hariri" : "Edit",
+                "/edit",
+                { message: original },
+                result => {
+                    if (!result || typeof result.rewrite !== "string" || !result.rewrite.trim()) {
+                        setStatus(
+                            aiStatus,
+                            say("The AI returned no corrected message.", "AI haikurudisha ujumbe uliosahihishwa."),
+                            "error"
+                        );
+                        return;
+                    }
+
+                    const corrected = result.rewrite.trim();
+                    rewriteBox.textContent = corrected;
+                    updateBeforeAfter(original, corrected);
+                    updateReadyCardLanguage();
+
+                    if (rewriteReadyCard) {
+                        rewriteReadyCard.hidden = false;
+                        rewriteReadyCard.classList.remove("rewrite-ready-flash");
+                        void rewriteReadyCard.offsetWidth;
+                        rewriteReadyCard.classList.add("rewrite-ready-flash");
+                        rewriteReadyCard.addEventListener("animationend", function cleanupEditReadyFlash(event) {
+                            if (event.animationName === "rewrite-ready-flash") {
+                                rewriteReadyCard.classList.remove("rewrite-ready-flash");
+                            }
+                        }, { once: true });
+                    }
+
+                    setStatus(aiStatus, "", "");
+                }
+            );
+        });
+    }
     let rewriteTimer = null;
     let rewriteRevision = 0;
     let rewritePending = false;

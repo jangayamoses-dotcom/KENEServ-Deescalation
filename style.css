@@ -1,4 +1,4 @@
-﻿* {
+* {
     box-sizing: border-box;
 }
 
@@ -2237,6 +2237,55 @@ body.dark-mode .analysis #score-explanation #score-reasons .score-reason {
     animation: quickActionTwinkle 3s ease-in-out infinite alternate;
 }
 
+/* Brighter, dedicated twinkle for the Edit button */
+#quick-edit {
+    position: relative;
+    overflow: hidden;
+    border-color: #d4a017;
+    box-shadow: 0 0 9px rgba(245, 190, 45, .45);
+}
+
+#quick-edit::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,1) 1.5px, transparent 2.5px),
+        radial-gradient(circle, rgba(255,215,90,1) 1.5px, transparent 2.5px),
+        radial-gradient(circle, rgba(120,180,255,1) 1.5px, transparent 2.5px),
+        radial-gradient(circle, rgba(255,255,255,.95) 1px, transparent 2px);
+    background-size: 29px 25px, 41px 33px, 53px 39px, 67px 47px;
+    background-position: 5px 7px, 17px 11px, 31px 19px, 13px 29px;
+    background-repeat: repeat;
+    opacity: .7;
+    animation: editButtonTwinkle 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes editButtonTwinkle {
+    0% {
+        opacity: .35;
+        box-shadow: 0 0 5px rgba(245, 190, 45, .3);
+        background-position: 5px 7px, 17px 11px, 31px 19px, 13px 29px;
+    }
+    100% {
+        opacity: .95;
+        box-shadow: 0 0 15px rgba(245, 190, 45, .8);
+        background-position: 13px 15px, 25px 19px, 39px 27px, 21px 37px;
+    }
+}
+
+body.dark-mode #quick-edit {
+    border-color: #f5c451;
+    box-shadow: 0 0 12px rgba(245, 196, 81, .55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #quick-edit::after {
+        animation: none;
+        opacity: .5;
+    }
+}
 @keyframes quickActionTwinkle {
     0% {
         opacity: .12;
@@ -2258,5 +2307,19 @@ body.dark-mode .analysis #score-explanation #score-reasons .score-reason {
     #quick-shorten::after {
         animation: none;
         opacity: .25;
+    }
+}
+
+
+/* Centre the standalone Edit action below the four quick actions */
+#quick-actions #quick-edit {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: 50%;
+}
+
+@media (max-width: 500px) {
+    #quick-actions #quick-edit {
+        width: 70%;
     }
 }

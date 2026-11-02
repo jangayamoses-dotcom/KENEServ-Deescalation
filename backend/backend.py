@@ -41,6 +41,7 @@ class RateLimitMiddleware:
     async def __call__(self, scope, receive, send):
         if scope["type"] != "http" or scope.get("path") not in {
             "/rewrite",
+            "/edit",
             "/caption",
             "/analyze",
         }:
@@ -249,6 +250,17 @@ class RewriteRequest(BaseModel):
             raise ValueError("Message must not be blank.")
         return value
 
+
+class EditRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=MAX_MESSAGE_LENGTH)
+
+    @field_validator("message")
+    @classmethod
+    def message_must_not_be_blank(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("Message must not be blank.")
+        return value
 
 class RewriteResponse(BaseModel):
     rewrite: str
@@ -587,6 +599,75 @@ async def rewrite(
         raise HTTPException(
             status_code=503,
             detail="Rewrite service is temporarily unavailable.",
+        ) from None
+
+
+@app.post("/edit", response_model=RewriteResponse)
+async def edit_message(
+    request: EditRequest,
+    origin: str | None = Header(default=None),
+    host: str | None = Header(default=None),
+):
+    require_local_origin(origin, host)
+    client = app.state.client
+    if client is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Edit service is temporarily unavailable.",
+        )
+
+    system_prompt = """
+You are a careful proofreader.
+
+Correct only clear grammar, spelling, and punctuation errors in the user's message.
+
+STRICT PRESERVATION RULES:
+- Make the smallest possible corrections.
+- Preserve the original wording, vocabulary, sentence order, and sentence structure as much as possible.
+- Preserve the exact meaning, facts, details, emphasis, tone, personality, and voice.
+- Do not paraphrase, rephrase, shorten, expand, simplify, formalise, soften, or improve the writing style.
+- Do not add, remove, assume, or invent information.
+- Do not translate the message.
+- Keep English as English and Kiswahili as Kiswahili.
+- If the message mixes languages, preserve that language mix.
+- Respect natural Kenyan English, Kiswahili, and ordinary conversational expressions. Do not treat them as errors simply because they are informal or regional.
+- If no correction is needed, return the original message unchanged.
+
+Return only the corrected message. Do not add explanations, labels, quotation marks, or commentary.
+"""
+
+    try:
+        completion = await client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": request.message},
+            ],
+            temperature=0.0,
+            max_completion_tokens=500,
+        )
+        corrected = completion.choices[0].message.content
+
+        if not isinstance(corrected, str) or not corrected.strip():
+            raise HTTPException(
+                status_code=503,
+                detail="Edit service returned an empty response.",
+            )
+
+        return RewriteResponse(rewrite=corrected.strip(), model=MODEL)
+
+    except HTTPException:
+        raise
+    except Exception as exc:
+        print(
+            f"Edit provider failure: type={type(exc).__name__}, "
+            f"status={getattr(exc, 'status_code', None)}, "
+            f"code={getattr(exc, 'code', None)}",
+            flush=True,
+        )
+        raise HTTPException(
+            status_code=503,
+            detail="Edit service is temporarily unavailable.",
         ) from None
 
 MAX_CAPTION_DESCRIPTION_LENGTH = 3000
