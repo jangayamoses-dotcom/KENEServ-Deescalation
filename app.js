@@ -2822,7 +2822,7 @@ applyCaptionInterfaceLanguage();
 
     async function postJson(route, payload) {
         const controller = new AbortController();
-        const timer = window.setTimeout(() => controller.abort(), 16000);
+        const timer = window.setTimeout(() => controller.abort(), 90000);
 
         try {
             const response = await fetch(API_BASE + route, {
@@ -3456,7 +3456,7 @@ applyCaptionInterfaceLanguage();
         if (activeController) activeController.abort();
         activeController = new AbortController();
         const controller = activeController;
-        const timeout = window.setTimeout(() => controller.abort(), 16000);
+        const timeout = window.setTimeout(() => controller.abort(), 90000);
 
         say(
             "Analysing context with AI... local analysis remains available.",
