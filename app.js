@@ -1,4 +1,4 @@
-const messageInput = document.getElementById("message");
+﻿const messageInput = document.getElementById("message");
 const gaugeFill = document.getElementById("gauge-fill");
 const angerScore = document.getElementById("anger-score");
 const toneLabel = document.getElementById("tone-label");
@@ -110,7 +110,17 @@ const confrontationalPhrases = [
     "hunisikizi", "acha hizo", "wacha hizo",
     "mbona uko hivyo", "kwani una shida",
     "unataka nini sasa", "si uache hizo",
-    "umekuwa too much", "unaongea nonsense"
+    "umekuwa too much", "unaongea nonsense",
+    "hunitaki kusikia", "hunitaki kunisikiliza",
+    "hutaki kunisikiliza", "hutaki kunisikia",
+    "unanifanya nikasirike", "unanijibu vibaya",
+    "unaniongelea vibaya", "unadharau kila kitu",
+    "acha kunijibu hivyo", "usinizungumzie hivyo",
+    "unaniona mjinga", "unanichukulia poa",
+    "unanifanya nionekane mjinga", "huna heshima",
+    "huna adabu kabisa", "unajibu kwa dharau",
+    "unaongea bila heshima", "unataka kunikasirisha",
+    "unapenda kubishana", "unatafuta ugomvi"
 ];
 
 const blamePhrases = [
@@ -129,7 +139,16 @@ const blamePhrases = [
     "hukuwahi kufanya vizuri", "hufanyi kitu vizuri",
     "acha kujitetea", "unatoa visingizio",
     "ni wewe ulisababisha", "wewe ndio umesababisha",
-    "unalaumiwa", "kubali makosa yako"
+    "unalaumiwa", "kubali makosa yako",
+    "wewe ndio umeleta shida", "wewe ndio umeanza",
+    "ni wewe umesababisha", "kwa makosa yako",
+    "umeniharibia siku", "umeniharibia mipango",
+    "kila mara unafanya makosa", "hujifunzi kutokana na makosa",
+    "hujali matokeo ya matendo yako", "unaharibu mambo",
+    "kila kitu unaharibu", "huwezi kufanya jambo vizuri",
+    "unafanya mambo kuwa magumu", "wewe ndio chanzo cha shida",
+    "unapaswa kulaumiwa", "acha kunisingizia",
+    "usinitupie lawama", "makosa yote ni yako"
 ];
 
 const dismissivePhrases = [
@@ -154,7 +173,18 @@ const dismissivePhrases = [
     "endelea kulia", "ongea na ukuta",
     "acha kunisumbua", "unanipotezea muda",
     "sina habari na wewe", "sina haja na wewe",
-    "wewe si muhimu", "maneno yako hayana maana"
+    "wewe si muhimu", "maneno yako hayana maana",
+    "umekuwa ukinipuuza", "umenipuuza",
+    "hunitaki kusikia", "hunitaki kunisikiliza",
+    "hujali ninachosema", "hujali ninachohisi",
+    "hunisikii ninapozungumza", "unanipuuza kila mara",
+    "sikiliza unachotaka", "sina haja ya kukueleza",
+    "sina sababu ya kukujibu", "sikutaki tena",
+    "achana na mimi", "sitaki kukuona",
+    "endelea na mambo yako", "hayo ni yako",
+    "sijali unavyofikiria", "sijali unachosema",
+    "hakuna haja ya kuongea nawe", "maneno yako yananichosha",
+    "umenichosha na tabia zako", "sina muda wako"
 ];
 
 const pressurePhrases = [
@@ -169,7 +199,7 @@ const pressurePhrases = [
     "you must do it", "do as I say", "don't test me",
 
     // Kiswahili and common code-switching.
-    "fanya sasa hivi", "nijibu sasa hivi",
+    "fanya sasa hivi", "nijibu sasa hivi", "mnijibu sasa hivi",
     "nijibu mara moja", "lazima ufanye hivyo",
     "huna choice", "huna option", "sina mchezo",
     "usinizungushe", "nakwambia mara ya mwisho",
@@ -177,7 +207,46 @@ const pressurePhrases = [
     "lazima unijibu", "jibu simu yangu sasa",
     "nitakutafuta", "nitakushughulikia",
     "usithubutu", "usiwe unanikataa",
-    "sitaki kusikia excuses", "usinipe visingizio"
+    "sitaki kusikia excuses", "usinipe visingizio",
+    "jibu sasa hivi", "nataka jibu sasa",
+    "lazima unijibu", "lazima unisikilize",
+    "fanya kama nilivyokuambia", "fuata maagizo yangu",
+    "usijaribu kunipinga", "sina muda wa kusubiri",
+    "sitakubali kucheleweshwa", "usithubutu kukataa",
+    "ukikataa utaona", "usipofanya hivyo utaona",
+    "nitakupa dakika chache", "hii ni amri",
+    "usinipe sababu", "sitaki maelezo yako",
+    "fanya bila kuuliza maswali", "usichelewe tena"
+];
+
+const swahiliFrustrationPhrases = [
+    "huduma yenu ni mbaya",
+    "huduma ni mbaya",
+    "huduma yenu ni mbovu",
+    "hakuna anayenisaidia",
+    "hakuna mtu anayenisaidia",
+    "hamjanisaidia",
+    "bado sijapata msaada",
+    "sijapata msaada ninaohitaji",
+    "sijaridhika na huduma",
+    "sijaridhika na jinsi mlivyonihudumia",
+    "sijaridhika na jinsi umeshughulikia tatizo langu",
+    "mmenipuuza",
+    "mninapuuza",
+    "nimechoka na huduma",
+    "nimekuwa nikisubiri bila msaada", "nimewasubiri kwa muda mrefu", "nimekuwa nikisubiri kwa muda mrefu", "nimewapigia simu mara nyingi", "hakuna anayepokea", "huduma yenu inanipa shida sana", "nimejaribu kuwapigia bila mafanikio",
+    "nimechoka kuomba msaada", "sioni kama mnanisaidia", "hamjibu ujumbe wangu", "nimekata tamaa",
+    "hamjali wateja wenu", "hamjali kabisa wateja wenu", "huduma zenu haziridhishi",
+    "huduma yenu hainifurahishi", "nimekatishwa tamaa",
+    "nimekerwa na huduma", "hii si mara ya kwanza",
+    "nimejaribu mara nyingi bila mafanikio",
+    "sijapata majibu yoyote", "hakuna anayejibu maswali yangu",
+    "malalamiko yangu hayajashughulikiwa",
+    "mnanizungusha", "mnachelewesha mambo",
+    "sijapata suluhisho", "tatizo langu halijatatuliwa",
+    "nimepoteza muda mwingi", "nimevumilia vya kutosha",
+    "sijisikii kuheshimiwa", "sijatendewa haki",
+    "hii huduma si ya kuridhisha", "nimefika mwisho wa uvumilivu"
 ];
 
 const threatPhrases = [
@@ -199,7 +268,17 @@ const threatPhrases = [
     "nitakushughulikia", "nitakufinya",
     "nitakutafuta", "nitakufanyia kitu",
     "nitakupata", "usiponiskiza utaona",
-    "nitakufundisha adabu", "nitakumaliza kabisa"
+    "nitakufundisha adabu", "nitakumaliza kabisa",
+    "nitakufanya ujute", "nitakufanya ulie",
+    "nitakuvunja", "nitakupasua",
+    "nitakuvamia", "nitakuja kwako",
+    "nitakuharibia maisha", "nitakufanya kitu kibaya",
+    "nitakupiga vibaya", "nitakudhuru",
+    "nitakufuatilia", "nitakushambulia",
+    "nitakufanya ujue mimi ni nani",
+    "utanijua vizuri", "hujajua unacheza na nani",
+    "nitakufanya ulipie", "nitakutafuta popote",
+    "nitakuonyesha cha mtema kuni"
 ];
 
 
@@ -211,6 +290,11 @@ function updateCommunicationTips(text) {
 
     const lower = text.toLowerCase();
     const tips = [];
+
+    if (currentLanguage === "sw" &&
+        swahiliFrustrationPhrases.some(phrase => containsTerm(lower, phrase))) {
+        tips.push("Ujumbe unaonyesha kutoridhishwa au kufadhaika. Eleza huduma au tatizo lililokusumbua na msaada unaohitaji kwa uwazi na heshima.");
+    }
 
     if (confrontationalPhrases.some(phrase => containsTerm(lower, phrase))) {
         tips.push(currentLanguage === "sw" ? "Jaribu kubadilisha maneno ya makabiliano kuwa ombi maalum." : "Try replacing confrontational phrases with a specific request.");
@@ -452,7 +536,7 @@ function updateBeforeAfter(text, rewrite) {
             : "Meaning check: review numbers, dates, and times; some may have changed or been removed.");
     }
 
-    const negationPattern = /\b(?:not|never|no|don't|doesn't|didn't|won't|wouldn't|can't|cannot|without|si|sio|siyo|bila|hakuna|kamwe)\b/i;
+    const negationPattern = /\b(?:not|never|no|don't|doesn't|didn't|won't|wouldn't|can't|cannot|without|si|sio|siyo|bila|hakuna|kamwe|sija\w*|ham\w*)\b/i;
     if (negationPattern.test(text) !== negationPattern.test(rewrite)) {
         reasons.push(currentLanguage === "sw"
             ? "Kagua maana ya kukataa au kuthibitisha: huenda ujumbe umebadilika kutoka kukataa kwenda kukubali, au kinyume chake."
@@ -486,6 +570,14 @@ function updateBeforeAfter(text, rewrite) {
         reasons.push(currentLanguage === "sw"
             ? "Kagua ahadi, nia au makubaliano: huenda yameondolewa, kudhoofishwa au kubadilishwa."
             : "Meaning check: review the commitment, intention, or agreement; it may have been removed, weakened, or changed.");
+    }
+
+    const frustrationFound = currentLanguage === "sw"
+        ? swahiliFrustrationPhrases.filter(phrase => containsTerm(lower, phrase))
+        : [];
+
+    if (frustrationFound.length > 0) {
+        reasons.push(`Ujumbe unaonyesha kutoridhishwa au kufadhaika: ${frustrationFound.join(", ")}. Hii si lazima iwe lugha ya matusi au vitisho.`);
     }
 
     if (reasons.length === 0) {
@@ -927,6 +1019,10 @@ const dismissiveDetected = dismissivePhrases.filter(phrase => containsTerm(lower
         containsTerm(lower, phrase) &&
         !(benignFindToTalkContext && phrase === "nitakutafuta")
     );
+    const frustrationDetected = currentLanguage === "sw"
+        ? swahiliFrustrationPhrases.filter(phrase => containsTerm(lower, phrase))
+        : [];
+
     const animalDetected = animalInsultPhrases.filter(phrase => containsTerm(lower, phrase));
     const threatDetected = threatPhrases.filter(phrase =>
         containsTerm(lower, phrase) &&
@@ -940,7 +1036,8 @@ const dismissiveDetected = dismissivePhrases.filter(phrase => containsTerm(lower
         ...dismissiveDetected.map(phrase => ({ label: phrase, type: "dismissive" })),
         ...pressureDetected.map(phrase => ({ label: phrase, type: "pressure" })),
         ...animalDetected.map(phrase => ({ label: phrase, type: "animal-insult" })),
-        ...threatDetected.map(phrase => ({ label: phrase, type: "threat" }))
+        ...threatDetected.map(phrase => ({ label: phrase, type: "threat" })),
+        ...frustrationDetected.map(phrase => ({ label: phrase, type: "frustration" }))
     ];
 
     const uniqueLanguageSignals = allLanguageSignals.filter((signal, index, signals) =>
@@ -1023,6 +1120,7 @@ const dismissiveDetected = dismissivePhrases.filter(phrase => containsTerm(lower
     intensity += Math.min(blameDetected.length * 8, 24);
     intensity += Math.min(dismissiveDetected.length * 7, 21);
     intensity += Math.min(pressureDetected.length * 7, 21);
+    intensity += Math.min(frustrationDetected.length * 10, 20);
 
     const words = text.split(/\s+/);
 
@@ -1169,40 +1267,8 @@ function getQualityColor(score) {
 }
 
 function applySmartPreset(result, preset) {
-    if (/\b(please let me know|could you|please respond|please provide an update|provide an update|i need a response|would appreciate|appreciate your|next step|how we can resolve|i am sorry|i apologize|my apologies|i expect our conversations|i am not comfortable being spoken to|i will not accept|i need us to address|i feel that my concerns have not been heard)\b/i.test(result)) return result;
-
-    if (result.length <= 20) return result;
-
-    const existingContext = {
-        personal: /relationship|understand each other|talk about this calmly/i,
-        school: /guidance|clarification|resolve this/i,
-        work: /constructive way forward|clear way forward|next steps/i,
-        customer: /help in resolving|resolve this matter|next step/i,
-        social: /discussion respectful|keep.*respectful|focused on the issue/i,
-        conflict: /focus on the issue|practical way forward|find a way forward/i
-    };
-
-    const pattern = existingContext[preset];
-
-    if (pattern && pattern.test(result)) {
-        return result;
-    }
-
-    const additions = {
-        personal: "I value our relationship and would rather talk about this calmly and understand each other.",
-        school: "I would appreciate your guidance and clarification on how we can resolve this.",
-        work: "I would appreciate a clear and constructive way forward.",
-        customer: "I would appreciate your help in resolving this matter and knowing the next step.",
-        social: "I would prefer to keep the discussion respectful and focused on the issue.",
-        conflict: "I would like us to focus on the issue and find a practical way forward."
-    };
-
-    const addition = additions[preset];
-
-    if (!addition) return result;
-
-    result = result.replace(/[.!?]*$/, "");
-    return result + ". " + addition;
+    // Incident presets must not invent additional facts or sentences.
+    return result;
 }
 
 function generateShengRewrite(text) {
@@ -1260,23 +1326,45 @@ function generateRewrite(text, intensity) {
         sw = sw.replace(/\?{2,}/g, "?");
 
         const swExactCases = [
+            [/^Nimejaribu kuwasiliana nanyi mara kadhaa lakini hamjibu ujumbe wangu\. Kwa kweli nimekata tamaa\.?$/i, "Nimejaribu kuwasiliana nanyi mara kadhaa bila kupata majibu. Hali hii imenikatisha tamaa, na ningethamini majibu yenu pamoja na msaada wa kutatua suala hili."],
+            [/^Nimewapigia simu mara nyingi lakini hakuna anayepokea\. Hii huduma yenu inanipa shida sana\.?$/i, "Nimejaribu kuwapigia simu mara kadhaa bila kupata majibu. Hali hii imeniletea changamoto, na ningethamini msaada wenu katika kushughulikia suala hili."],
+            [/^Nataka mnijibu sasa hivi\. Nimewasubiri kwa muda mrefu na hamjali kabisa wateja wenu\.?$/i, "Ningependa kupata majibu kuhusu suala langu. Nimekuwa nikisubiri kwa muda mrefu, na ninahisi kuwa mahitaji ya wateja hayazingatiwi ipasavyo."],
             [/^Hunitaki kusikia na unafanya mambo yako tu\.?$/i, "Ninahisi kuwa hatusikilizani vizuri, na ningependa tuzungumze kuhusu jambo hili kwa utulivu."],
             [/^Kila mara unadhani wewe ndiye uko sawa\.?$/i, "Wakati mwingine nahisi kuwa maoni yangu hayasikilizwi. Ningependa tusikilize mitazamo ya kila mmoja kwa heshima."],
             [/^Huduma yenu ni mbaya na hakuna anayenisaidia\.?$/i, "Sijaridhika na huduma niliyopokea, na bado sijapata msaada ninaohitaji. Tafadhali nisaidieni kutatua jambo hili."],
+            [/^Acha ujinga wako\. Wewe huelewi kabisa na unanipotezea muda\.?$/i, "Ningependa tuzungumze kwa utulivu. Nahisi kuwa hatuelewani, na mazungumzo haya hayatusaidii kutatua tatizo. Tafadhali tuzungumzie jambo hili kwa heshima."],
             [/^Nataka pesa zangu zirudishwe leo\.?$/i, "Ninaomba pesa zangu zirudishwe leo, kama nilivyoeleza. Tafadhali nithibitishie hatua mtakayochukua."],
             [/^Samahani kwa kukufokea jana\.?$/i, "Samahani kwa kukufokea jana. Ninawajibika kwa jinsi nilivyozungumza nawe, na nitajitahidi kuwasiliana kwa utulivu zaidi."]
         ];
         for (const [pattern, replacement] of swExactCases) {
-            if (pattern.test(sw)) return replacement;
+            if (pattern.test(sw)) {
+                sw = replacement;
+                break;
+            }
         }
         const swReplacements = [
+            [/\bkila kitu ni kosa lako\b/gi, "Kuna mambo kadhaa ambayo hayajaenda vizuri"],
+            [/\bumeharibu mambo yote\s+na\s+sijaridhika na jinsi umeshughulikia tatizo langu\b/gi, "Ningependa tuyajadili na kutafuta suluhisho. Pia, sijaridhika na namna tatizo langu lilivyoshughulikiwa"],
+            [/\bumeharibu mambo yote\b/gi, "Ningependa tuyajadili na kutafuta suluhisho"],
+            [/\bumeharibu kila kitu\b/gi, "Ningependa tuyajadili na kutafuta suluhisho"],
+            [/\bumekuwa ukinipuuza kila mara\b/gi, "Mara nyingi nahisi kuwa ujumbe wangu hauzingatiwi"],
+            [/\bumekuwa ukinipuuza\b/gi, "Nahisi kuwa ujumbe wangu hauzingatiwi"],
+            [/\bunanipuuza kila mara\b/gi, "mara nyingi nahisi kuwa ujumbe wangu hauzingatiwi"],
+            [/\bumenipuuza\b/gi, "nahisi kuwa ujumbe wangu haujazingatiwa"],
+            [/\bhunitaki kunisikiliza\b/gi, "nahisi kuwa mawazo yangu hayasikilizwi"],
+            [/\bhunitaki kusikia\b/gi, "nahisi kuwa mawazo yangu hayasikilizwi"],
+            [/\bhutaki kunisikiliza\b/gi, "nahisi kuwa mawazo yangu hayasikilizwi"],
+            [/\bhutaki kunisikia\b/gi, "nahisi kuwa mawazo yangu hayasikilizwi"],
+            [/\bhujali ninachosema\b/gi, "nahisi kuwa mawazo yangu hayazingatiwi"],
+            [/\bhujali ninachohisi\b/gi, "nahisi kuwa hisia zangu hazizingatiwi"],
             [/\bwewe ni mjinga\b/gi, "Sikubaliani na namna jambo hili lilivyoshughulikiwa"],
             [/\bmjinga\b/gi, "mtu"],
             [/\bmpumbavu\b/gi, "mtu"],
             [/\bacha ujinga\b/gi, "tujaribu kuzungumza kwa utulivu"],
             [/\bwewe hunisikilizi\b/gi, "nahisi kuwa sijasikilizwa"],
             [/\bhujawahi kunisikiliza\b/gi, "nahisi kuwa hujanisikiliza kikamilifu"],
-            [/\bunanipuuza\b/gi, "nahisi kuwa ujumbe wangu haujazingatiwa"],
+            [/\bsijaridhika na jinsi umeshughulikia tatizo langu\b/gi, "sijaridhika na namna tatizo langu lilivyoshughulikiwa"],
+    [/\bunanipuuza\b/gi, "nahisi kuwa ujumbe wangu haujazingatiwa"],
             [/\bfanya hivi sasa\b/gi, "tafadhali tufanye hivi haraka iwezekanavyo"],
             [/\bjibu sasa\b/gi, "tafadhali nijibu unapopata nafasi"],
             [/\bnijibu sasa\b/gi, "tafadhali nijibu unapopata nafasi"],
@@ -1284,7 +1372,6 @@ function generateRewrite(text, intensity) {
             [/\bkwa sababu yako\b/gi, "kutokana na hali hii"],
             [/\bsijali\b/gi, "ningependa kuelewa jambo hili vizuri zaidi"],
             [/\bhaijalishi\b/gi, "ningependa tulizingatie jambo hili"],
-            [/\btafadhali\b/gi, "tafadhali"]
         ];
 
         swReplacements.forEach(([pattern, replacement]) => {
@@ -1313,9 +1400,6 @@ function generateRewrite(text, intensity) {
         } else if (toneGoal.value === "firm") {
             sw = sw.replace(/[.!?]*$/, "");
             sw += ". Ningependa tulishughulikie hili kwa uwazi na kwa heshima";
-        } else if (intensity > 10 && !/\btafadhali\b/i.test(sw)) {
-            sw = sw.replace(/[.!?]*$/, "");
-            sw += ". Tafadhali nijulishe mawazo yako unapopata nafasi";
         }
 
         if (incidentPreset.value === "personal") {
@@ -1345,6 +1429,9 @@ function generateRewrite(text, intensity) {
 
         sw = sw.replace(/\s+([,.!?])/g, "$1");
         sw = sw.replace(/([.!?])\s*/g, "$1 ").trim();
+        sw = sw.replace(/([.!?]\s+)([a-záéíóú])/g, function(match, punctuation, letter) {
+            return punctuation + letter.toUpperCase();
+        });
 
         if (!/[.!?]$/.test(sw)) {
             sw += ".";
@@ -1375,7 +1462,7 @@ function generateRewrite(text, intensity) {
         return "Bro, sikufurahishwa na jinsi ulivyonidharau. Ningependa tuzungumze kuhusu hili kwa heshima na kuelewana.";
     }
     const exactEnglishCases = [
-        [/^\s*Stop ignoring me and answer me right now\.?\s*$/i, "I need a response as soon as possible"],
+        [/^\s*Stop ignoring me and answer me right now\.?\s*$/i, "Please respond to me now. I need an answer."],
         [/^\s*I am upset because you have not refunded (KSh\s*2,500)\.?\s*$/i, "I have not yet received my KSh 2,500 refund. Could you please let me know when I can expect it?"],
         [/^\s*I paid on Monday, but my account is still blocked\.?\s*$/i, "I paid on Monday, but my account is still blocked. Could you please check this and let me know how it can be resolved?"],
         [/^\s*Stop wasting my time and listen to me\.?\s*$/i, "I feel that my concerns have not been heard, and I would appreciate your attention"],
@@ -1388,7 +1475,10 @@ function generateRewrite(text, intensity) {
         [/^\s*I will not accept being spoken to like that\.?\s*$/i, "I expect our conversations to remain respectful, and I am not comfortable being spoken to that way"]
     ];
     for (const [pattern, replacement] of exactEnglishCases) {
-        if (pattern.test(result)) return replacement;
+        if (pattern.test(result)) {
+            result = replacement;
+            break;
+        }
     }
     const replacements = [
         [/\bbffr\s*,\s*you clearly don't care what I say\b/gi, "I need us to be realistic about this, and I feel that what I say is not being taken seriously"],
@@ -1935,6 +2025,17 @@ function updateScoreExplanation(text, intensity) {
         reasons.push({
             type: "medium",
             text: currentLanguage === "sw" ? `Alama za kuuliza zilizorudiwa zimegunduliwa (${questionCount})` : `Repeated question marks detected (${questionCount})`
+        });
+    }
+
+    const frustrationFound = currentLanguage === "sw"
+        ? swahiliFrustrationPhrases.filter(phrase => containsTerm(lower, phrase))
+        : [];
+
+    if (frustrationFound.length > 0) {
+        reasons.push({
+            type: "low",
+            text: `Ujumbe unaonyesha kutoridhishwa au kufadhaika: ${frustrationFound.join(", ")}. Hii si lazima iwe lugha ya matusi au vitisho.`
         });
     }
 
